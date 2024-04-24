@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 5px;
+            margin: 5px;
+            width: 100px;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+        .violet { background-color: #8a2be2; }
+        .indigo { background-color: #4b0082; }
+        .blue { background-color: #0000ff; }
+        .green { background-color: #008000; }
+        .yellow { background-color: #ffff00; }
+        .orange { background-color: #ffa500; }
+        .red {background-color: red}
+
+        .card:hover {
+            transform: scale(1.1);
+        }
+        p {
+            font-size: 20px; /* Adjust the size as needed */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+
+            <div class="card violet">
+                <h3>Watched</h3>
+                <p>25869</p>
+            </div>
+
+            <div class="card indigo">
+                <h3>Searches</h3>
+                <p>2318</p>
+            </div>
+
+            <div class="card blue">
+                <h3>Likes</h3>
+                <p>0</p>
+            </div>
+
+            <div class="card green">
+                <h3>Comments</h3>
+                <p>0</p>
+            </div>
+
+            <div class="card yellow">
+                <h3>Active Days</h3>
+                <p>132</p>
+            </div>
+
+            <div class="card orange">
+                <h3>Up Time</h3>
+                <p>36.16%</p>
+            </div>
+
+            <div class="card red">
+                <h3>Videos/Day</h3>
+                <p>195.98</p>
+            </div>
+
+    </div>
+</body>
+</html>

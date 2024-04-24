@@ -441,12 +441,12 @@ plt.savefig(os.path.join(image_dir,"heatmap.png"))
 ### BASIC
 if(len(channel_link)==0):
     raise ValueError("Could not find any links. Please send the developer your takeout data, so the issue can be addressed")
-df_searches = 0
-'''HTML().search_history()
+df_searches = HTML().search_history()
+HTML().search_history()
 for i,j in df_searches['DATE_TIME'].items():
     k = time_format(j)
-    df_searches.loc[i,'DATE_TIME'] = k'''
-df_searches_yr = 0
+    df_searches.loc[i,'DATE_TIME'] = k
+df_searches_yr = df_searches[df_searches['DATE_TIME'].str.contains('2024')]
 # print(df_searches)
 # print(type(df_searches['SEARCHES']))
 try:
@@ -464,16 +464,16 @@ df_likes_yr = 0
 
 #
 watched_video = len(urls_id)
-searches = 0
+searches = df_searches['SEARCHES'].count()
 likes = 0
 comments = 0
 
-searches_yr = 0
+searches_yr = df_searches_yr['SEARCHES'].count()
 likes_yr = 0
 comments_yr = 0
-active_total_day = str(active_day) + '/' + '365'
+active_total_day = str(active_day)
 UpTime = '{:.2%}'.format(active_day/365)
-vpd ='{:.2f}'.format(watched_video/365)
+vpd ='{:.2f}'.format(watched_video/active_day)
 
 stat_list = [watched_video,searches,likes,comments,active_total_day,UpTime,vpd]
 dfstat = pd.DataFrame(stat_list).T
@@ -677,7 +677,7 @@ df_catSize= pd.DataFrame(df_api_dlc["categoryName"].value_counts())
 df_catSize.reset_index(inplace=True)
 df_catSize.columns=['categoryName','watchTimes1']
 # print(df_api_dlc['durations'])
-
+print(df.columns)
 ## categoryWatchTime_min
 dict_catDu = {}
 for i in indict.keys():
@@ -691,6 +691,7 @@ df_catDu.reset_index(inplace=True)
 print(df_catDu)
 df_catDu.columns=['categoryName','watchTime_min']
 for i,j in df_catDu['watchTime_min'].items():
+    print(df_catDu["watchTime_min"].items())
     df_catDu.iloc[i,1] = '{:.2f}'.format(j/60)
     df_catDu.iloc[i, 1] = float(df_catDu.iloc[i, 1])
 df_catDu.sort_values(['watchTime_min'],ascending=False,inplace=True)
@@ -699,7 +700,7 @@ cnt = 0
 for i in df_catDu['watchTime_min']:
     if i:
         cnt += 1
-if cnt > 3:
+if 1:
     list1 = []
     total = 0
     other = 0
@@ -723,7 +724,7 @@ if cnt > 3:
 elif cnt == 3:
     list1 = []
     total = 0
-    for j, k in df['watchTime_min'].items():
+    for j, k in df_catDu['watchTime_min'].items():
             list1.append(k)
             total += k
             continue
@@ -955,7 +956,7 @@ import os
 
 class Visualization:
     def generate_html_from_dataframe(self):
-        # Start with the HTML content including the styling
+    # Start with the HTML content including the styling
         html_content = """
 <!DOCTYPE html>
 <html lang="en">
@@ -964,15 +965,15 @@ class Visualization:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Times New Roman', Times, serif, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
         }
 
         h1 {
             text-align: center;
             margin-top: 20px;
+            
         }
 
         .container {
@@ -982,69 +983,70 @@ class Visualization:
             height: 100vh;
         }
 
-        .styled-table {
-            width: 80%;
-            border-collapse: collapse;
-            border-spacing: 0;
-            border: 1px solid #ddd;
-            margin-top: 20px;
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 5px;
+            margin: 5px;
+            width: 100px;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+        .violet { background-color: #8a2be2; }
+        .indigo { background-color: #4b0082; }
+        .blue { background-color: #0000ff; }
+        .green { background-color: #008000; }
+        .yellow { background-color: #ffff00; }
+        .orange { background-color: #ffa500; }
+        .red {background-color: red}
+
+        .card:hover {
+            transform: scale(1.1);
+        }
+        p {
+            font-size: 20px; /* Adjust the size as needed */
         }
 
-        .styled-table th, .styled-table td {
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-
-        .styled-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        .styled-table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .styled-table tbody tr:hover {
-            background-color: #f2f2f2;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Styled table -->
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>Watched</th>
-                    <th>Searches</th>
-                    <th>Likes</th>
-                    <th>Comments</th>
-                    <th>Active Total Day</th>
-                    <th>UpTime</th>
-                    <th>Video Watched Per Day</th>
-                </tr>
-            </thead>
-            <tbody>
-"""        
-        # Add the data rows from the DataFrame
-        for index, row in dfstat.iterrows():
-            html_content += "                <tr>\n"
-            for value in row:
-                html_content += f"                    <td>{value}</td>\n"
-            html_content += "                </tr>\n"
-        
-        # Complete the HTML content
+"""
+
+    # Add the data categories as cards
+        categories = ["watched", "searches", "likes", "comments", "active_total_day", "UpTime", "video_watched_per_day"]
+        display_names = {
+    "watched": "Watched",
+    "searches": "Searches",
+    "likes": "Likes",
+    "comments": "Comments",
+    "active_total_day": "Active Days",
+    "UpTime": "Up Time",
+    "video_watched_per_day": "Videos/Day"
+        }
+        colors = ["violet", "indigo", "blue", "green", "yellow", "orange", "red"]
+        for category, color in zip(categories, colors):
+            html_content += f"""
+            <div class="card {color}">
+                <h3>{display_names.get(category, category)}</h3>
+                <p>{dfstat[category].iloc[0]}</p>
+            </div>
+"""
+
+    # Complete the HTML content
         html_content += """
-            </tbody>
-        </table>
     </div>
 </body>
 </html>
 """
+
+    # Do something with the html_content (e.g., save it to a file)
+    # ...
+
         
         # Save the HTML content to a file
-        html_file_path = os.path.join(image_dir, "header.html")
+        html_file_path = os.path.join(image_dir, "header_shivalee.html")
         with open(html_file_path, "w") as html_file:
             html_file.write(html_content)
 
@@ -1079,27 +1081,52 @@ class Visualization:
         fig = go.Figure(data=go.Heatmap(z=df, x=Cols, y=Index, colorscale='amp', text=df, hoverinfo='z'))
 
         fig.update_layout(
-            title="What Time Do You Usually Watch Youtube Videos? (Your YTB Setting Time)",
-            title_font_size=27,
+            title="What Time Do You Usually Watch Youtube Videos?",
+            title_font_size=24,
             title_font_color="steelblue",
-            title_font_family="Arial",
-            annotations=[
-                dict(
-                    text="The plot above is based on a total of %s videos you have watched"%(len(urls_id)),
-                    x=0,
-                    y=1.02,
-                    xref="paper",
-                    yref="paper",
-                    showarrow=False,
-                    font=dict(
-                        size=20,
-                        color="steelblue",
-                        family="Arial"
-                    )
-                )
-            ]
+            title_font_family="Times New Roman",
         )
-        fig.write_html(os.path.join(image_dir, "week_heatmap.html"))
+        fig.write_html(os.path.join(image_dir, "week_heatmap_shivalee.html"))
+
+    
+    def bar_graph_week(self):
+        print("Generating Bar Graph for Weekly Views.....")
+        # Sample data for weekly views
+        html = HTML()
+        views_by_day = [
+
+            html.dataframe_heatmap(0),
+            html.dataframe_heatmap(1),
+            html.dataframe_heatmap(2),
+            html.dataframe_heatmap(3),
+            html.dataframe_heatmap(4),
+            html.dataframe_heatmap(5),
+            html.dataframe_heatmap(6)
+        ]
+    
+        # Sum the views for each day
+        total_views = np.sum(views_by_day, axis=1)
+
+    # Define weekdays
+        weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+    # Create bar graph
+        fig = go.Figure(data=go.Bar(x=weekdays, y=total_views, marker_color='steelblue'))
+        fig.update_layout(
+            title="Weekly Views",
+            xaxis_title="Weekdays",
+            yaxis_title="Number of Views",
+            title_font_size=24,
+            title_font_color="steelblue",
+            title_font_family="Times New Roman",
+            xaxis=dict(tickfont=dict(size=14)),
+            yaxis=dict(tickfont=dict(size=14)),
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)'
+        )
+
+    # Write to HTML file
+        fig.write_html(os.path.join(image_dir, "bar_graph_week_shivalee.html"))
 
     def word_cloud_watch(self):
         cm = HTML().find_video_title()
@@ -1111,7 +1138,7 @@ class Visualization:
             title = "What Do You Usually Watch on YouTube?"
 
         word_cloud_watch = WordCloud(
-            stopwords=["porn", "nigga", "pussy"] + english_stopwords,
+            stopwords=["amp", "quot"] + english_stopwords,
             background_color="white",
             colormap="Set2",
             max_words=380,
@@ -1122,26 +1149,12 @@ class Visualization:
         fig = px.imshow(word_cloud_watch)
         fig.update_layout(
             title=title,
-            title_font_size=18,
+            title_font_size=24,
             title_font_color="steelblue",
-            title_font_family="Comic Sans MS"
+            title_font_family="Times New Roman"
         )
 
-        if len(cm) > 0:
-            fig.add_annotation(
-                text="WordCloud is based on a total of {} watched videos".format(len(cm)),
-                x=0,
-                y=1.02,
-                xref="paper",
-                yref="paper",
-                showarrow=False,
-                font=dict(
-                    size=13,
-                    color="steelblue",
-                    family="Comic Sans MS"
-                )
-            )
-        fig.write_html(os.path.join(image_dir, "word_cloud_watch.html"))
+        fig.write_html(os.path.join(image_dir, "word_cloud_watch_shivalee.html"))
 
 
     def table(self):
@@ -1174,102 +1187,39 @@ class Visualization:
 
     def word_cloud_search(self):
         print("Generating Word Cloud.....")
-        list = []        #df_searches_yr['SEARCHES']    #.tolist()
-        # print(list)
+        list = df_searches_yr['SEARCHES']    #.tolist()
+
         if len(list) == 0:
             unique_string = 'None'
-            bg = np.array(Image.open(logo))
-            # import nltk.stopwords
-            # stopwords.words("english")
-            stop_words = ["porn", "nigga", "pussy"] + english_stopwords
-            found = False
-            FONTS = ("LinBiolinum_R", "Arial", "arial", "DejaVuSansMono")
-            for font in FONTS:  # this should fix an error where the font couldn't be found
-                try:
-                    word_cloud_search = WordCloud(
-                        stopwords=stop_words,
-                        mask=bg,
-                        background_color="white",
-                        colormap="Set2",
-                        font_path=font,
-                        max_words=380,
-                        contour_width=2,
-                        prefer_horizontal=1,
-                    ).generate(unique_string)
-                except OSError:
-                    continue
-                else:
-                    found = True
-                    break
-            if not found:
-                raise OSError("Could not find any of these fonts: %s" % (FONTS))
-            del FONTS
-            del found
-
-            plt.figure()
-            plt.imshow(word_cloud_search)
-            plt.axis("off")
-            # plt.savefig("your_file_name"+".png", bbox_inches="tight")
-            plt.title("You didn't search any thing this yaer",
-                      fontsize=18,
-                      color="steelblue",
-                      fontweight="bold",
-                      fontname="Comic Sans MS")
-
-            plt.savefig(os.path.join(image_dir, "word_cloud_search.png"), dpi=400)
-            plt.clf()
+            title = "You didn't search anything this year"
         else:
             unique_string = (" ").join(list)
-            bg = np.array(Image.open(logo))
-            # import nltk.stopwords
-            # stopwords.words("english")
-            found=False
-            stop_words = ["porn", "nigga", "pussy"] + english_stopwords
-            FONTS=("LinBiolinum_R","Arial","arial","DejaVuSansMono")
-            for font in FONTS:	#this should fix an error where the font couldn't be found
-                try:
-                    word_cloud_search = WordCloud(
-                        stopwords= stop_words,
-                        mask=bg,
-                        background_color="white",
-                        colormap="Set2",
-                        font_path=font,
-                        max_words=380,
-                        contour_width=2,
-                        prefer_horizontal=1,
-                    ).generate(unique_string)
-                except OSError:
-                    continue
-                else:
-                    found=True
-                    break
-            if not found:
-                raise OSError("Could not find any of these fonts: %s"%(FONTS))
-            del FONTS
-            del found
+            title = "What Do You Usually Search on YouTube?"
 
-            plt.figure()
-            plt.imshow(word_cloud_search)
-            plt.axis("off")
-            # plt.savefig("your_file_name"+".png", bbox_inches="tight")
-            plt.title("What Do You Usually Search on YouTube?",
-                      fontsize=18,
-                      color="steelblue",
-                      fontweight="bold",
-                      fontname="Comic Sans MS")
+        stop_words = ["amp", "quot"] + english_stopwords
+        word_cloud_search = WordCloud(
+            stopwords=stop_words,
+            background_color="white",
+            colormap="Set2",
+            max_words=380,
+            contour_width=2,
+            prefer_horizontal=1
+        ).generate(unique_string)
 
-            plt.annotate("   WordCloud is based on a total of %s search queries"%(len(list)),
-                         (0, 0), (-10, 10),
-                         fontsize=13,
-                         color="steelblue",
-                         fontweight="bold",
-                         fontname="Comic Sans MS",
-                         xycoords="axes fraction",
-                         textcoords="offset points",
-                         va="top")
+        fig = px.imshow(word_cloud_search)
+        fig.update_layout(
+            title=title,
+            title_font_size=24,
+            title_font_color="steelblue",
+            title_font_family="Times New Roman"
+        )
 
-            plt.savefig(os.path.join(image_dir,"word_cloud_search.png"), dpi=400)
-            plt.clf()
+
+        # Save as HTML
+        pio.write_html(fig, os.path.join(image_dir, "word_cloud_search_aman.html"))
+
+
+
     def word_cloud_comments(self):
         list = []  #df_comments_yr['COMMENTS']
         print("Generating Word Cloud.....")
@@ -1444,11 +1394,10 @@ class Visualization:
             title="Most Watched Videos This Year",
             title_font_size=24,
             title_font_color="steelblue",
-            title_font_family="Comic Sans MS",
-            height=600,  # Adjust the height of the plot as needed
+            title_font_family="Times New Roman",
         )
 
-        html_file = os.path.join(image_dir, "bar2.html")
+        html_file = os.path.join(image_dir, "bar2_shivalee.html")
         pio.write_html(fig, html_file)  # Save the plot as HTML
         print(f"Bar plot saved as HTML: {html_file}")
 
@@ -1490,37 +1439,46 @@ class Visualization:
         plt.savefig(os.path.join(image_dir,"bar3.png"), dpi=400)
         plt.clf()
     ## Channel
+
     def bar4(self):
         sns.set(style="white", font="SimSun", color_codes=True, font_scale=1.5)
-        data = [dfz.iloc[0, -4], dfz.iloc[1, -4], dfz.iloc[2, -4], dfz.iloc[3, -4], dfz.iloc[4, -4]]
-        pal = sns.color_palette("GnBu", len(data))
-        rank = np.array(data).argsort().argsort()
-        print("Generating Bar Plot with Plotly.....")
     
+        # Get the top 10 data
+        top_10_data = dfz.iloc[:10, -4]
+        top_10_names = dfz.iloc[:10, -5]
+    
+        pal = sns.color_palette("GnBu", len(top_10_data))
+        rank = np.array(top_10_data).argsort().argsort()
+        print("Generating Bar Plot with Plotly.....")
+
         fig = go.Figure()
 
         fig.add_trace(go.Bar(
-            x=[dfz.iloc[0, -5], dfz.iloc[1, -5], dfz.iloc[2, -5], dfz.iloc[3, -5], dfz.iloc[4, -5]],
-            y=[dfz.iloc[0, -4], dfz.iloc[1, -4], dfz.iloc[2, -4], dfz.iloc[3, -4], dfz.iloc[4, -4]],
-            marker=dict(color=data, colorscale='viridis_r'), 
-            text=[f"{val:1.0f}" for val in data],
+            x=top_10_names,
+            y=top_10_data,
+            marker=dict(color=top_10_data, colorscale='viridis_r'), 
+            text=[f"{val:1.0f}" for val in top_10_data],
             textposition='auto'
         ))
 
         fig.update_layout(
-            title="Most Watched Channel This Year",
+            title="Most Watched Channels This Year",
+            title_font_size=24,
+            title_font_color="steelblue",
+            title_font_family="Times New Roman",
             xaxis=dict(title='Names'),
             yaxis=dict(title='Number of Views'),
             font=dict(
-                family="Comic Sans MS",
-                size=18,
+                family="Times New Roman",
+                size=12,
                 color="steelblue"
             )
         )
 
-        html_file_path = os.path.join(image_dir, "bar4.html")
+        html_file_path = os.path.join(image_dir, "bar4_shivalee.html")
         pio.write_html(fig, html_file_path)
         print(f"Bar plot saved as HTML file: {html_file_path}")
+
 
     def score(self):
         print("Calculating Your Activity Score.....")
@@ -1578,9 +1536,29 @@ class Visualization:
         for i in dfz['lanCounts']:
             if i:
                 cnt += 1
-        value1 = int(dfz.iloc[0, -1])
-        value2 = int(dfz.iloc[1, -1])
-        if cnt > 3:
+                print(i)
+        
+        print("------------------------------")
+        if cnt==1:
+            value1 = int(dfz.iloc[0, -1])
+
+            labels = [dfz.iloc[0, -2]]
+            values = [value1]
+
+            fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
+                                          marker=dict(colors=colors[:2]), hole=0.7)])
+            fig.update_layout(title="You Favorite Videos Language",
+                                title_font_size=24,
+                                title_font_color="steelblue",
+                                title_font_family="Times New Roman",
+                              )
+
+            html_file_path = os.path.join(image_dir, "language_shivalee.html")
+            pio.write_html(fig, html_file_path)
+
+        elif cnt > 1:
+            value2 = int(dfz.iloc[1, -1])
+        elif cnt > 3:
             value3 = int(dfz.iloc[2, -1])
             value4 = int(dfz.iloc[3, -1])
             v_t = value1 + value2 + value3 + value4
@@ -1594,10 +1572,13 @@ class Visualization:
 
             fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
                                           marker=dict(colors=colors), hole=0.7)])
-            fig.update_layout(title="Your Favorite Videos Language",
-                              title_font=dict(size=21, color="steelblue", family="Arial"))
+            fig.update_layout(title="Yo Favorite Videos Language",
+                                title_font_size=24,
+                                title_font_color="steelblue",
+                                title_font_family="Times New Roman",
+                              )
 
-            html_file_path = os.path.join(image_dir, "language.html")
+            html_file_path = os.path.join(image_dir, "language_shivalee.html")
             pio.write_html(fig, html_file_path)
 
         elif cnt == 3:
@@ -1612,10 +1593,12 @@ class Visualization:
 
             fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
                                       marker=dict(colors=colors[:3]), hole=0.7)])
-            fig.update_layout(title="Your Favorite Videos Language",
-                              title_font=dict(size=21, color="steelblue", family="Arial"))
+            fig.update_layout(title="Y Favorite Videos Language",
+                              title_font_size=24,
+            title_font_color="steelblue",
+            title_font_family="Times New Roman",)
 
-            html_file_path = os.path.join(image_dir, "language.html")
+            html_file_path = os.path.join(image_dir, "language_shivalee.html")
             pio.write_html(fig, html_file_path)
 
         else:
@@ -1628,10 +1611,12 @@ class Visualization:
 
             fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
                                           marker=dict(colors=colors[:2]), hole=0.7)])
-            fig.update_layout(title="Your Favorite Videos Language",
-                              title_font=dict(size=21, color="steelblue", family="Arial"))
+            fig.update_layout(title=" Favorite Videos Language",
+                              title_font_size=24,
+            title_font_color="steelblue",
+            title_font_family="Times New Roman",)
 
-            html_file_path = os.path.join(image_dir, "language.html")
+            html_file_path = os.path.join(image_dir, "language_shivalee.html")
             pio.write_html(fig, html_file_path)
 
     
@@ -1656,9 +1641,11 @@ class Visualization:
             fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
                                           marker=dict(colors=colors), hole=0.7)])
             fig.update_layout(title="Your Favorite Videos Category Ratio",
-                              title_font=dict(size=21, color="steelblue", family="Arial"))
+                              title_font_size=24,
+            title_font_color="steelblue",
+            title_font_family="Times New Roman",)
 
-            html_file_path = os.path.join(image_dir, "categoryRatio.html")
+            html_file_path = os.path.join(image_dir, "categoryRatio_shivalee.html")
             pio.write_html(fig, html_file_path)
 
         elif cnt == 3:
@@ -1670,9 +1657,12 @@ class Visualization:
             fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
                                           marker=dict(colors=colors[:3]), hole=0.7)])
             fig.update_layout(title="Your Favorite Videos Category Ratio",
-                              title_font=dict(size=21, color="steelblue", family="Arial"))
+                              title_font_size=24,
+            title_font_color="steelblue",
+            title_font_family="Times New Roman",
+                              )
 
-            html_file_path = os.path.join(image_dir, "categoryRatio.html")
+            html_file_path = os.path.join(image_dir, "categoryRatio_shivalee.html")
             pio.write_html(fig, html_file_path)
 
         else:
@@ -1682,9 +1672,11 @@ class Visualization:
             fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
                                           marker=dict(colors=colors[:2]), hole=0.7)])
             fig.update_layout(title="Your Favorite Videos Category Ratio",
-                              title_font=dict(size=21, color="steelblue", family="Arial"))
+                              title_font_size=24,
+            title_font_color="steelblue",
+            title_font_family="Times New Roman",)
 
-            html_file_path = os.path.join(image_dir, "categoryRatio.html")
+            html_file_path = os.path.join(image_dir, "categoryRatio_shivalee.html")
             pio.write_html(fig, html_file_path)
 
 
@@ -1878,13 +1870,15 @@ class Visualization:
             print("No opener found for your platform. Just open YouTube_Report.pdf.")
 
 if __name__ == "__main__":
+    print(dfz)
     visual = Visualization()
-    visual.heat_map_week()
+    '''visual.heat_map_week()
+    visual.bar_graph_week()
     visual.generate_html_from_dataframe()
     visual.table()
-    visual.word_cloud_watch()
+    visual.word_cloud_watch()'''
     visual.word_cloud_search()
-    visual.word_cloud_comments()
+    '''visual.word_cloud_comments()
     visual.score()
     visual.bar1()
     visual.bar2()
@@ -1892,7 +1886,7 @@ if __name__ == "__main__":
     visual.bar4()
     visual.language()
     visual.categoryRatio()
-    visual.gen_pdf()
+    visual.gen_pdf()'''
 
 
 t2= datetime.datetime.now()

@@ -9,7 +9,6 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
         }
 
         h1 {
@@ -24,62 +23,67 @@
             height: 100vh;
         }
 
-        .styled-table {
-            width: 80%;
-            border-collapse: collapse;
-            border-spacing: 0;
-            border: 1px solid #ddd;
-            margin-top: 20px;
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin: 10px;
+            width: 50px;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
         }
+        .violet { background-color: #8a2be2; }
+        .indigo { background-color: #4b0082; }
+        .blue { background-color: #0000ff; }
+        .green { background-color: #008000; }
+        .yellow { background-color: #ffff00; }
+        .orange { background-color: #ffa500; }
+        .red {background-color: red}
 
-        .styled-table th, .styled-table td {
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-            text-align: left;
-        }
-
-        .styled-table th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
-
-        .styled-table tbody tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        .styled-table tbody tr:hover {
-            background-color: #f2f2f2;
+        .card:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Styled table -->
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>Watched</th>
-                    <th>Searches</th>
-                    <th>Likes</th>
-                    <th>Comments</th>
-                    <th>Active Total Day</th>
-                    <th>UpTime</th>
-                    <th>Video Watched Per Day</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>2350</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>201/365</td>
-                    <td>55.07%</td>
-                    <td>6.44</td>
-                </tr>
 
-            </tbody>
-        </table>
+            <div class="card violet">
+                <h3>watched</h3>
+                <p>2350</p>
+            </div>
+
+            <div class="card indigo">
+                <h3>searches</h3>
+                <p>10</p>
+            </div>
+
+            <div class="card blue">
+                <h3>likes</h3>
+                <p>0</p>
+            </div>
+
+            <div class="card green">
+                <h3>comments</h3>
+                <p>0</p>
+            </div>
+
+            <div class="card yellow">
+                <h3>active_total_day</h3>
+                <p>201</p>
+            </div>
+
+            <div class="card orange">
+                <h3>UpTime</h3>
+                <p>55.07%</p>
+            </div>
+
+            <div class="card red">
+                <h3>video_watched_per_day</h3>
+                <p>6.44</p>
+            </div>
+
     </div>
 </body>
 </html>
