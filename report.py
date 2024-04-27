@@ -510,6 +510,24 @@ df_yr = pd.concat([df_video_title,df_urls_id,df_channel_link,df_channel_title,df
 df_yr.columns=['video_title','video_id','video_link','channel_link','channel_title','watch_time','time_day']
 df_yr.drop(['time_day'],axis=1,inplace=True)
 
+# top 5 channels csv with video titles
+video_titles = []
+
+# Iterate over the rows of df_top5
+for index, row in df_top5.iterrows():
+    # Get the video_id for the current row
+    video_id = row['video_id']
+    
+    # Look up the video title in df_video_title based on the video_id
+    video_title = df[df['video_id'] == video_id]['video_title'].iloc[0]
+    
+    # Append the video title to the list
+    video_titles.append(video_title)
+
+# Add the list of video titles as a new column to df_top5
+df_top5['video_title'] = video_titles
+df_top5.to_csv(csv_dir + 'watch_top5.csv', mode='a',encoding='utf_8_sig', header=True, index=True)
+
 ## api requests
 df_yr_dlc = pd.DataFrame({'publishedAt':0,'title':0,'categoryId':0,'defaultAudioLanguage':0,'duration':0,'licensedContent':0,
                           'viewCount':0, 'likeCount':0, 'commentCount':0,},index=[0])
@@ -1065,26 +1083,42 @@ class Visualization:
 
         Index = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         Cols = [
-            "0AM to 2AM",
-            "2AM to 4AM",
-            "4AM to 6AM",
-            "6AM to 8AM",
-            "8AM to 10AM",
-            "10AM to 12PM",
-            "12PM to 2PM",
-            "2PM to 4PM",
-            "4PM to 6PM",
-            "6PM to 8PM",
-            "8PM to 10PM",
-            "10PM to 12AM",
+            "0",
+            "2",
+            "4",
+            "6",
+            "8",
+            "10",
+            "12",
+            "14",
+            "16",
+            "18",
+            "20",
+            "22",
         ]
-        fig = go.Figure(data=go.Heatmap(z=df, x=Cols, y=Index, colorscale='amp', text=df, hoverinfo='z'))
+
+        colors = [
+    [0, 'rgb(248, 246, 227)'],
+    [0.25, 'rgb(151, 231, 225)'],
+    [0.5, 'rgb(106, 212, 221)'],
+    [1, 'rgb(122, 162, 227)']
+]
+        
+        fig = go.Figure(data=go.Heatmap(z=df, x=Cols, y=Index, colorscale=colors, text=df, hoverinfo='z'))
 
         fig.update_layout(
             title="What Time Do You Usually Watch Youtube Videos?",
             title_font_size=24,
             title_font_color="steelblue",
             title_font_family="Times New Roman",
+            xaxis=dict(
+                title="Hour of Day",
+            tickvals=[i-0.5 for i in range(13)],  
+            ticktext=[str(i * 2) for i in range(13)], 
+            tickmode='array', 
+            tickangle=0,
+        ),
+        yaxis=dict(title='Day'),
         )
         fig.write_html(os.path.join(image_dir, "week_heatmap_shivalee.html"))
 
@@ -1347,25 +1381,37 @@ class Visualization:
     ### TOP5
     def bar2(self):
         print("Generating Bar Plot.....")
+
+        current_df = pd.read_csv(os.path.join(os.getcwd(),"csv_file_Shivalee/watch_top5.csv"))
         data = [
-            df_top5.iloc[0, 3],
-            df_top5.iloc[1, 3],
-            df_top5.iloc[2, 3],
-            df_top5.iloc[3, 3],
-            df_top5.iloc[4, 3]
+            current_df.iloc[0, 4],
+            current_df.iloc[1, 4],
+            current_df.iloc[2, 4],
+            current_df.iloc[3, 4],
+            current_df.iloc[4, 4]
         ]
         data.reverse()  # Reverse the data to have the highest values at the top
         
         # Get the corresponding text for each bar
-        text_data = [
-            df_top5.iloc[0, 2],
-            df_top5.iloc[1, 2],
-            df_top5.iloc[2, 2],
-            df_top5.iloc[3, 2],
-            df_top5.iloc[4, 2]
-        ]
+        text_data = []
+        for i in range(5):
+            words = re.split(r'\s+|[\-|]', current_df.iloc[i, 5])
+    
+            # Keep the first three words and discard the rest
+            title = ' '.join(words[:3])
+            # title = current_df.iloc[i, 5].split("|" or "-")
+            text_data.append(title)
         text_data.reverse()  # Reverse the text data
         
+        link_data=[df_top5.iloc[0, 3],
+            current_df.iloc[1, 3],
+            current_df.iloc[2, 3],
+            current_df.iloc[3, 3],
+            current_df.iloc[4, 3]
+
+        ]
+
+        link_data.reverse()
         y_labels = ["#5", "#4", "#3", "#2", "#1"]  # Reverse the labels accordingly
         
         fig = go.Figure(data=[
@@ -1373,19 +1419,20 @@ class Visualization:
                 x=data,
                 y=y_labels,
                   # Place the text inside the bars
-                marker=dict(color=data, colorscale='YlOrBr'),  # Use the YlOrBr colorscale
+                marker=dict(color='#97E7E1'), 
                 orientation='h',
             )
         ])
         
         # Add annotations as links
         for i, text in enumerate(text_data):
+            font_color = "#7AA2E3"
             fig.add_annotation(
                 x=data[i] / 2,  # Position the annotation in the middle of the bar
                 y=y_labels[i],
-                text=f'<a href="{text_data[i]}">{text}</a>',
+                text=f'<a href="{link_data[i]}" style="color: {font_color}; text-decoration: underline; font-size: 14px;"><b>{text_data[i]}</b></a>',
                 showarrow=False,
-                font=dict(color='white', size=12),  # Customize the font color and size
+                font=dict(color='black', size=16),  # Customize the font color and size
                 xanchor='center',  # Anchor the text in the center of the bar
                 yanchor='middle',
             )
@@ -1395,6 +1442,10 @@ class Visualization:
             title_font_size=24,
             title_font_color="steelblue",
             title_font_family="Times New Roman",
+            xaxis=dict(
+            title="Number of Times Viewed",  # Add x-axis title
+            title_font=dict(size=14, color="black"),  # Set x-axis title font size and color
+        ),
         )
 
         html_file = os.path.join(image_dir, "bar2_shivalee.html")
@@ -1442,23 +1493,39 @@ class Visualization:
 
     def bar4(self):
         sns.set(style="white", font="SimSun", color_codes=True, font_scale=1.5)
-    
+
+        dfz = pd.read_csv(os.path.join(os.getcwd(),"csv_file_Shivalee/api_rep.csv"))
+
         # Get the top 10 data
         top_10_data = dfz.iloc[:10, -4]
         top_10_names = dfz.iloc[:10, -5]
+
+        top_10_data = top_10_data[::-1]
+        top_10_names = top_10_names[::-1]
     
-        pal = sns.color_palette("GnBu", len(top_10_data))
-        rank = np.array(top_10_data).argsort().argsort()
         print("Generating Bar Plot with Plotly.....")
 
         fig = go.Figure()
 
-        fig.add_trace(go.Bar(
-            x=top_10_names,
-            y=top_10_data,
-            marker=dict(color=top_10_data, colorscale='viridis_r'), 
+        
+
+        for i, name in enumerate(top_10_names[::-1]):
+            fig.add_shape(
+                type="line",
+                x0=0, y0=name,
+                x1=top_10_data[i], y1=name,
+                line=dict(color='#7AA2E3', width=4),
+                # hoverinfo='none'
+            )
+
+        fig.add_trace(go.Scatter(
+            x=top_10_data,
+            y=top_10_names,
+            mode='markers',
+            marker=dict(color='#6AD4DD', symbol='circle', size=10),
             text=[f"{val:1.0f}" for val in top_10_data],
-            textposition='auto'
+            textposition='middle right',  # Adjust text position
+            hoverinfo='text'
         ))
 
         fig.update_layout(
@@ -1466,13 +1533,14 @@ class Visualization:
             title_font_size=24,
             title_font_color="steelblue",
             title_font_family="Times New Roman",
-            xaxis=dict(title='Names'),
-            yaxis=dict(title='Number of Views'),
+            xaxis=dict(title='Number of Views', showgrid=False),
+            yaxis=dict(title='Names', showgrid=False, ticklen=10),
             font=dict(
                 family="Times New Roman",
-                size=12,
-                color="steelblue"
-            )
+                size=14,
+                color="black"
+            ),
+             hoverlabel=dict(bgcolor="white", font_size=12),
         )
 
         html_file_path = os.path.join(image_dir, "bar4_shivalee.html")
@@ -1872,21 +1940,21 @@ class Visualization:
 if __name__ == "__main__":
     print(dfz)
     visual = Visualization()
-    '''visual.heat_map_week()
-    visual.bar_graph_week()
+    visual.heat_map_week()
+    '''visual.bar_graph_week()
     visual.generate_html_from_dataframe()
     visual.table()
     visual.word_cloud_watch()'''
-    visual.word_cloud_search()
-    '''visual.word_cloud_comments()
-    visual.score()
-    visual.bar1()
+    # visual.word_cloud_search()
+    # visual.word_cloud_comments()
+    # visual.score()
+    # visual.bar1()
     visual.bar2()
-    visual.bar3()
+    # visual.bar3()
     visual.bar4()
-    visual.language()
-    visual.categoryRatio()
-    visual.gen_pdf()'''
+    # visual.language()
+    # visual.categoryRatio()
+    # visual.gen_pdf()
 
 
 t2= datetime.datetime.now()
