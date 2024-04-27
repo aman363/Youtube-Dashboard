@@ -1446,6 +1446,7 @@ class Visualization:
             title="Number of Times Viewed",  # Add x-axis title
             title_font=dict(size=14, color="black"),  # Set x-axis title font size and color
         ),
+            plot_bgcolor='rgba(0,0,0,0)',
         )
 
         html_file = os.path.join(image_dir, "bar2_shivalee.html")
@@ -1535,6 +1536,7 @@ class Visualization:
             title_font_family="Times New Roman",
             xaxis=dict(title='Number of Views', showgrid=False),
             yaxis=dict(title='Names', showgrid=False, ticklen=10),
+            plot_bgcolor='rgba(0,0,0,0)',
             font=dict(
                 family="Times New Roman",
                 size=14,
