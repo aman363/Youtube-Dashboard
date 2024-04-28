@@ -1629,6 +1629,67 @@ class Visualization:
         pio.write_html(fig, html_file_path)
 
 
+    def radarChartComparison(self):
+        print("Creating Radar Chart Comparison: ...")
+        # Define file paths
+        file_paths = {
+            "Ritam": "csv_file_Ritam/api_rep.csv",
+            "Shivalee": "csv_file_Shivalee/api_rep.csv",
+            "Aman": "csv_file_Aman/api_rep.csv"
+        }
+    
+        # Define colors for each category
+        colors = ["#1f77b4", "#aec7e8", "#7fbf7b", "#2ca02c", "#ff7f0e", "#ffbb78", "#d62728", "#ff9896", "#9467bd", "#c5b0d5"]
+    
+        # Initialize radar chart data
+        data = []
+    
+        # Iterate over each user's CSV file
+        for user, file_path in file_paths.items():
+            dfz = pd.read_csv(file_path)
+            cnt = len(dfz)
+            if cnt == 0:
+                print(f"No category data available for {user}.")
+                continue
+        
+            # Extract category names and ratios
+            category_names = dfz['categoryName']
+            category_ratios = dfz['categoryRatio']
+        
+            # Normalize ratios to percentages
+            normalized_ratios = [ratio * 100 for ratio in category_ratios]
+        
+            # Add radar chart trace for current user
+            trace = go.Scatterpolar(
+                r=normalized_ratios,
+                theta=category_names,
+                fill='toself',
+                name=user,
+                marker=dict(color=colors[:cnt]),
+            )
+            data.append(trace)
+    
+        # Create radar chart layout
+        layout = go.Layout(
+            polar=dict(
+                radialaxis=dict(
+                    visible=True,
+                    range=[0, 50]  # Adjust the range as needed
+                )),
+            showlegend=True,
+            title='Category Ratio Comparison',
+            title_font_size=24,
+            title_font_color="steelblue",
+            title_font_family="Times New Roman",
+        )
+
+        # Create radar chart figure
+        fig = go.Figure(data=data, layout=layout)
+
+        # Save the chart as HTML
+        html_file_path = os.path.join(image_dir, "radarChart_comparison.html")
+        pio.write_html(fig, html_file_path)
+
 
 
     def gen_pdf(self):
@@ -1833,9 +1894,10 @@ if __name__ == "__main__":
     #visual.bar2()
     # visual.bar3()
     #visual.bar4()
-    visual.language()
-    visual.categoryRatio()
+    #visual.language()
+    #visual.categoryRatio()
     # visual.gen_pdf()
+    visual.radarChartComparison()
 
 
 t2= datetime.datetime.now()
