@@ -18,12 +18,14 @@
             background-color: #6ad4dd;
             color: white;
             text-align: left;
-            padding: 20px 0;
+            padding: 10px 0;
             font-size: 24px;
             position: relative;
             font-family: 'Times New Roman', Times, serif, sans-serif;
             overflow: hidden; /* Hide overflowing content */
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            display: flex; /* Align items horizontally */
+            align-items: center; /* Center align content vertically */
         }
 
         .tab {
@@ -31,10 +33,14 @@
             cursor: pointer;
             padding: 10px 20px;
             font-size: 20px;
+            background-color: #2b6cb0; /* Default tab color */
+            color: white;
+            border-radius: 8px 8px 0 0; /* Rounded corners at the top */
+            margin-right: 5px;
         }
 
         .tab.active {
-            background-color: #2b6cb0; /* Active tab color */
+            background-color: #1e4e7e;; /* Active tab color */
         }
 
         .dropdown {
@@ -79,8 +85,13 @@
             display: flex;
             justify-content: center; /* Adjust alignment */
             gap: 0px; /* Adjust the gap between visualizations */
-            width: 100%; /* Set the width of the container */
-            margin-bottom: 20px;
+        }
+
+        .visualizations1 {
+            display: flex;
+            justify-content: center; /* Adjust alignment */
+            gap: 0px;
+            margin-top: 20px;
         }
         .visualization {
             width: 100%; /* Each visualization takes 48% width */
@@ -100,16 +111,23 @@
         .tab-content.active {
             display: block; /* Show active tab content */
         }
+        .logo {
+            width: 40px; /* Adjust the width of the logo */
+            height: auto; /* Maintain aspect ratio */
+            margin-right: 10px;
+            margin-left: 10px; /* Add space between logo and text */
+        }
     </style>
 </head>
 <body>
     <header class="header">
-        Youtube Data Analysis
+        <img src="Images/logo.png" alt="Logo" class="logo">
+        <span style="margin-right: 10px;">Youtube Data Analysis</span>
         <div class="tab active" data-tab="tab1" onclick="showTab('tab1')">Tab 1</div>
         <div class="tab" data-tab="tab2" onclick="showTab('tab2')">Tab 2</div>
         <div class="tab" data-tab="tab3" onclick="showTab('tab3')">Tab 3</div>
         <div class="tab" data-tab="tab4" onclick="showTab('tab4')">Tab 4</div>
-        <div class="tab" data-tab="tab5" onclick="showTab('tab5')">Tab 5</div>
+        <div class="tab" data-tab="tab5" onclick="showTab('tab5')">Comparison</div>
 
         <div class="dropdown">
             <!-- Dropdown menu -->
@@ -169,12 +187,17 @@
         </div>
 
         <div class="tab-content" id="tab5">
-            <div class="visualizations">
+            <div class="visualizations1">
                 <div class="visualization">
-                    <iframe class="cards" src="Images/shorts.html" width="100%" height=400 style="border: none;"></iframe>
+                    <iframe  src="Images/shorts.html" width="100%" height=500 style="border: none;"></iframe>
                 </div>
                 <div class="visualization">
-                    <iframe class="cards" src="Images/radarChart_comparison.html" width="100%" height=400 style="border: none;"></iframe>
+                    <iframe src="Images/radarChart_comparison.html" width="100%" height=500 style="border: none;"></iframe>
+                </div>
+            </div>
+            <div class="visualizations1">
+                <div class="visualization">
+                    <iframe  src="Images/barGraph_comparison.html" width="50%" height=500 style="border: none;"></iframe>
                 </div>
             </div>
         </div>
@@ -195,6 +218,14 @@
     });
     document.getElementById(tabName).classList.add('active');
     document.querySelector('.tab[data-tab="' + tabName + '"]').classList.add('active');
+
+    if (tabName === 'tab5') {
+                document.getElementById('headerFrame').style.display = 'none';
+                document.getElementById('selectVisualization').style.display = 'none';
+            } else {
+                document.getElementById('headerFrame').style.display = 'block';
+                document.getElementById('selectVisualization').style.display = 'block';
+            }
 }
 
 

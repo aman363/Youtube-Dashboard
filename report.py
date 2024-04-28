@@ -1253,100 +1253,6 @@ class Visualization:
         pio.write_html(fig, os.path.join(image_dir, "word_cloud_search_aman.html"))
 
 
-
-    def word_cloud_comments(self):
-        list = []  #df_comments_yr['COMMENTS']
-        print("Generating Word Cloud.....")
-        if len(list) == 0:
-            unique_string = 'None'
-            bg = np.array(Image.open(logo))
-            stop_words = ["porn", "nigga", "pussy"] + english_stopwords
-            found = False
-            FONTS = ("LinBiolinum_R", "Arial", "arial", "DejaVuSansMono")
-            for font in FONTS:  # this should fix an error where the font couldn't be found
-                try:
-                    word_cloud_comments = WordCloud(
-                        stopwords=stop_words,
-                        mask=bg,
-                        background_color="white",
-                        colormap="Set2",
-                        font_path=font,
-                        max_words=380,
-                        contour_width=2,
-                        prefer_horizontal=1,
-                    ).generate(unique_string)
-                except OSError:
-                    continue
-                else:
-                    found = True
-                    break
-            if not found:
-                raise OSError("Could not find any of these fonts: %s" % (FONTS))
-            del FONTS
-            del found
-
-            plt.figure()
-            plt.imshow(word_cloud_comments)
-            plt.axis("off")
-            # plt.savefig("your_file_name"+".png", bbox_inches="tight")
-            plt.title("You didn't make any comment last year",
-                      fontsize=18,
-                      color="steelblue",
-                      fontweight="bold",
-                      fontname="Comic Sans MS")
-            plt.savefig(os.path.join(image_dir, "word_cloud_comments.png"), dpi=400)
-            plt.clf()
-        else:
-            unique_string = (" ").join(list)
-            bg = np.array(Image.open(logo))
-            found=False
-            stop_words = ["porn", "nigga", "pussy"] + english_stopwords
-            FONTS=("LinBiolinum_R","Arial","arial","DejaVuSansMono")
-            for font in FONTS:	#this should fix an error where the font couldn't be found
-                try:
-                    word_cloud_comments = WordCloud(
-                        stopwords=stop_words,
-                        mask=bg,
-                        background_color="white",
-                        colormap="Set2",
-                        font_path=font,
-                        max_words=380,
-                        contour_width=2,
-                        prefer_horizontal=1,
-                    ).generate(unique_string)
-                except OSError:
-                    continue
-                else:
-                    found=True
-                    break
-            if not found:
-                raise OSError("Could not find any of these fonts: %s"%(FONTS))
-            del FONTS
-            del found
-
-            plt.figure()
-            plt.imshow(word_cloud_comments)
-            plt.axis("off")
-            # plt.savefig("your_file_name"+".png", bbox_inches="tight")
-            plt.title("What Do You Usually Comments on YouTube?",
-                      fontsize=18,
-                      color="steelblue",
-                      fontweight="bold",
-                      fontname="Comic Sans MS")
-
-            plt.annotate("   WordCloud is based on a total of %s comments"%(str(len(list))),
-                         (0, 0), (-10, 10),
-                         fontsize=13,
-                         color="steelblue",
-                         fontweight="bold",
-                         fontname="Comic Sans MS",
-                         xycoords="axes fraction",
-                         textcoords="offset points",
-                         va="top")
-
-            plt.savefig(os.path.join(image_dir,"word_cloud_comments.png"), dpi=400)
-            plt.clf()
-
     ### WSLC
     def bar1(self):
         print("Generating Bar Plot.....")
@@ -1692,6 +1598,61 @@ class Visualization:
 
 
 
+    def barGraphComparison(self):
+        print("Creating Bar Graph Comparison: ...")
+        # Define file paths
+        file_paths = {
+            "Ritam": "csv_file_Ritam/api_rep.csv",
+            "Shivalee": "csv_file_Shivalee/api_rep.csv",
+            "Aman": "csv_file_Aman/api_rep.csv"
+        }
+
+        user_colors = {
+            "Ritam": "#1f77b4",
+            "Shivalee": "#aec7e8",
+            "Aman": "#7fbf7b"
+        }
+        # Initialize bar graph data
+        data = []
+
+        # Iterate over each user's CSV file
+        for user, file_path in file_paths.items():
+            dfz = pd.read_csv(file_path)
+            cnt = len(dfz)
+            if cnt == 0:
+                print(f"No category data available for {user}.")
+                continue
+
+            # Extract category names and ratios
+            category_names = dfz['categoryName']
+            category_ratios = dfz['categoryRatio']
+
+            # Add bar graph trace for current user
+            trace = go.Bar(
+                x=category_names,
+                y=category_ratios,
+                name=user,
+                marker=dict(color=user_colors[user]),
+            )
+            data.append(trace)
+
+        # Create bar graph layout
+        layout = go.Layout(
+            barmode='group',  # Adjust the bar mode as needed (group, stacked, overlay)
+            showlegend=True,
+            title='Category Ratio Comparison',
+            title_font_size=24,
+            title_font_color="steelblue",
+            title_font_family="Times New Roman",
+        )
+
+        # Create bar graph figure
+        fig = go.Figure(data=data, layout=layout)
+
+        # Save the chart as HTML
+        html_file_path = os.path.join(image_dir, "barGraph_comparison.html")
+        pio.write_html(fig, html_file_path)
+
     def gen_pdf(self):
         print("Combining Images into PDF.....")
         path0 = os.path.join(image_dir, "heatmap.png")
@@ -1897,7 +1858,8 @@ if __name__ == "__main__":
     #visual.language()
     #visual.categoryRatio()
     # visual.gen_pdf()
-    visual.radarChartComparison()
+    #visual.radarChartComparison()
+    visual.barGraphComparison()
 
 
 t2= datetime.datetime.now()
