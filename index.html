@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,16 +11,30 @@
         .container {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: right; /* Center align content */
+            width: 100vw;
         }
         .header {
-            background-color: steelblue;
+            background-color: #6ad4dd;
             color: white;
             text-align: left;
             padding: 20px 0;
             font-size: 24px;
             position: relative;
             font-family: 'Times New Roman', Times, serif, sans-serif;
+            overflow: hidden; /* Hide overflowing content */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .tab {
+            display: inline-block;
+            cursor: pointer;
+            padding: 10px 20px;
+            font-size: 20px;
+        }
+
+        .tab.active {
+            background-color: #2b6cb0; /* Active tab color */
         }
 
         .dropdown {
@@ -61,13 +77,13 @@
         }
         .visualizations {
             display: flex;
-            justify-content: space-between; /* Adjust alignment */
+            justify-content: center; /* Adjust alignment */
             gap: 0px; /* Adjust the gap between visualizations */
             width: 100%; /* Set the width of the container */
             margin-bottom: 20px;
         }
         .visualization {
-            width: 90%; /* Each visualization takes 48% width */
+            width: 100%; /* Each visualization takes 48% width */
             margin-right: 20px;
         }
         iframe {
@@ -75,14 +91,26 @@
         }
         .cards {
             box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);;
-            margin-bottom: -10px;
-            margin-top: -10px;
+            
+            
+        }
+        .tab-content {
+            display: none; /* Hide tab content by default */
+        }
+        .tab-content.active {
+            display: block; /* Show active tab content */
         }
     </style>
 </head>
 <body>
     <header class="header">
         Youtube Data Analysis
+        <div class="tab active" data-tab="tab1" onclick="showTab('tab1')">Tab 1</div>
+        <div class="tab" data-tab="tab2" onclick="showTab('tab2')">Tab 2</div>
+        <div class="tab" data-tab="tab3" onclick="showTab('tab3')">Tab 3</div>
+        <div class="tab" data-tab="tab4" onclick="showTab('tab4')">Tab 4</div>
+        <div class="tab" data-tab="tab5" onclick="showTab('tab5')">Tab 5</div>
+
         <div class="dropdown">
             <!-- Dropdown menu -->
             <select id="selectVisualization" onchange="changeVisualization()">
@@ -96,42 +124,77 @@
         <!-- Initial iframes -->
         <iframe class="cards" id="headerFrame" src="Images/header_aman.html" width="100%" height=auto style="border: none;"></iframe>
 
-        <div class="visualizations">
-            <div class="visualization">
-                <iframe id="heatmapFrame" src="Images/week_heatmap_aman.html" width="100%" height="500" style="border: none;"></iframe>
-            </div>
-            <div class="visualization">
-                <iframe id="bargraphWeekFrame" src="Images/bar_graph_week_aman.html" width="100%" height="500" style="border: none;"></iframe>
-            </div>
-        </div>
-        
-        <div class="visualizations">
-            <div class="visualization">
-                <iframe id="bar4Frame" src="Images/bar4_aman.html" width="100%" height="500" style="border: none;"></iframe>
-            </div>
-            <div class="visualization">
-                <iframe id="bar2Frame" src="Images/bar2_aman.html" width="100%" height="500" style="border: none;"></iframe>
+        <div class="tab-content active" id="tab1">
+            <div class="visualizations">
+                <div class="visualization">
+                    <iframe id="heatmapFrame" src="Images/week_heatmap_aman.html" width="100%" height="400" style="border: none;"></iframe>
+                </div>
+                <div class="visualization">
+                    <iframe id="bargraphWeekFrame" src="Images/bar_graph_week_aman.html" width="100%" height="400" style="border: none;"></iframe>
+                </div>
             </div>
         </div>
-        <div class="visualizations">
-            <div class="visualization">
-                <iframe id="wordCloudWatchFrame" src="Images/word_cloud_watch_aman.html" width="100%" height="400" style="border: none;"></iframe>
-            </div>
-            <div class="visualization">
-                <iframe id="wordCloudSearchFrame" src="Images/word_cloud_search_aman.html" width="100%" height="400" style="border: none;"></iframe>
-            </div>
-        </div>
-        <div class="visualizations">
-            <div class="visualization">
-                <iframe id="languageFrame" src="Images/language_aman.html" width="100%" height="400" style="border: none;"></iframe>
-            </div>
-            <div class="visualization">
-                <iframe id="categoryRatioFrame" src="Images/categoryRatio_aman.html" width="100%" height="400" style="border: none;"></iframe>
+
+        <div class="tab-content" id="tab2">
+            <div class="visualizations">
+                <div class="visualization">
+                    <iframe id="bar4Frame" src="Images/bar4_aman.html" width="100%" height="400" style="border: none;"></iframe>
+                </div>
+                <div class="visualization">
+                    <iframe id="bar2Frame" src="Images/bar2_aman.html" width="100%" height="400" style="border: none;"></iframe>
+                </div>
             </div>
         </div>
+
+        <div class="tab-content" id="tab3">
+            <div class="visualizations">
+                <div class="visualization">
+                    <iframe id="wordCloudWatchFrame" src="Images/bubble-watch-history-aman.html" width="100%" height="400" style="border: none;"></iframe>
+                </div>
+                <div class="visualization">
+                    <iframe id="wordCloudSearchFrame" src="Images/bubble-search-history-aman.html" width="100%" height="400" style="border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab4">
+            <div class="visualizations">
+                <div class="visualization">
+                    <iframe id="languageFrame" src="Images/language_aman.html" width="100%" height="400" style="border: none;"></iframe>
+                </div>
+                <div class="visualization">
+                    <iframe id="categoryRatioFrame" src="Images/categoryRatio_aman.html" width="100%" height="400" style="border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="tab5">
+            <div class="visualizations">
+                <div class="visualization">
+                    <iframe class="cards" src="Images/shorts.html" width="80%" height=400 style="border: none;"></iframe>
+                </div>
+            </div>
+        </div>
+
     </div>
 
+
+
     <script>
+        function showTab(tabName) {
+    var tabs = document.querySelectorAll('.tab');
+    var tabContents = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => {
+        tab.classList.remove('active');
+    });
+    tabContents.forEach(tabContent => {
+        tabContent.classList.remove('active');
+    });
+    document.getElementById(tabName).classList.add('active');
+    document.querySelector('.tab[data-tab="' + tabName + '"]').classList.add('active');
+}
+
+
         function changeVisualization() {
             var selectedOption = document.getElementById("selectVisualization").value;
             document.getElementById("headerFrame").src = "Images/header_" + selectedOption + ".html";
@@ -139,10 +202,11 @@
             document.getElementById("bargraphWeekFrame").src = "Images/bar_graph_week_" + selectedOption + ".html";
             document.getElementById("bar4Frame").src = "Images/bar4_" + selectedOption + ".html";
             document.getElementById("bar2Frame").src = "Images/bar2_" + selectedOption + ".html";
-            document.getElementById("wordCloudWatchFrame").src = "Images/word_cloud_watch_" + selectedOption + ".html";
-            document.getElementById("wordCloudSearchFrame").src = "Images/word_cloud_search_" + selectedOption + ".html";
+            document.getElementById("wordCloudWatchFrame").src = "Images/bubble-watch-history-" + selectedOption + ".html";
+            document.getElementById("wordCloudSearchFrame").src = "Images/bubble-search-history-" + selectedOption + ".html";
             document.getElementById("languageFrame").src = "Images/language_" + selectedOption + ".html";
             document.getElementById("categoryRatioFrame").src = "Images/categoryRatio_" + selectedOption + ".html";
+            // You may need to modify this part to change the iframes in different tabs based on selectedOption
         }
     </script>
 </body>

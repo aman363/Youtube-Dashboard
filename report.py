@@ -1006,16 +1006,16 @@ class Visualization:
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             padding: 5px;
-            margin: 5px;
-            width: 100px;
+            margin: 20px;
+            width: 250px;
             text-align: center;
             transition: transform 0.3s ease-in-out;
         }
-        .violet { background-color: #8a2be2; }
-        .indigo { background-color: #4b0082; }
-        .blue { background-color: #0000ff; }
-        .green { background-color: #008000; }
-        .yellow { background-color: #ffff00; }
+        .violet { background-color: #97e7e1; }
+        .indigo { background-color: #97e7e1; }
+        .blue { background-color: #97e7e1; }
+        .green { background-color: #97e7e1; }
+        .yellow { background-color: #97e7e1; }
         .orange { background-color: #ffa500; }
         .red {background-color: red}
 
@@ -1023,7 +1023,7 @@ class Visualization:
             transform: scale(1.1);
         }
         p {
-            font-size: 20px; /* Adjust the size as needed */
+            font-size: 25px; /* Adjust the size as needed */
         }
 
     </style>
@@ -1033,7 +1033,7 @@ class Visualization:
 """
 
     # Add the data categories as cards
-        categories = ["watched", "searches", "likes", "comments", "active_total_day", "UpTime", "video_watched_per_day"]
+        categories = ["watched", "searches", "likes", "active_total_day", "video_watched_per_day"]
         display_names = {
     "watched": "Watched",
     "searches": "Searches",
@@ -1120,7 +1120,7 @@ class Visualization:
         ),
         yaxis=dict(title='Day'),
         )
-        fig.write_html(os.path.join(image_dir, "week_heatmap_shivalee.html"))
+        fig.write_html(os.path.join(image_dir, "week_heatmap_ritam.html"))
 
     
     def bar_graph_week(self):
@@ -1382,7 +1382,7 @@ class Visualization:
     def bar2(self):
         print("Generating Bar Plot.....")
 
-        current_df = pd.read_csv(os.path.join(os.getcwd(),"csv_file_Shivalee/watch_top5.csv"))
+        current_df = pd.read_csv(os.path.join(os.getcwd(),"csv_file_Ritam/watch_top5.csv"))
         data = [
             current_df.iloc[0, 4],
             current_df.iloc[1, 4],
@@ -1449,7 +1449,7 @@ class Visualization:
             plot_bgcolor='rgba(0,0,0,0)',
         )
 
-        html_file = os.path.join(image_dir, "bar2_shivalee.html")
+        html_file = os.path.join(image_dir, "bar2_ritam.html")
         pio.write_html(fig, html_file)  # Save the plot as HTML
         print(f"Bar plot saved as HTML: {html_file}")
 
@@ -1495,7 +1495,7 @@ class Visualization:
     def bar4(self):
         sns.set(style="white", font="SimSun", color_codes=True, font_scale=1.5)
 
-        dfz = pd.read_csv(os.path.join(os.getcwd(),"csv_file_Shivalee/api_rep.csv"))
+        dfz = pd.read_csv(os.path.join(os.getcwd(),"csv_file_Ritam/api_rep.csv"))
 
         # Get the top 10 data
         top_10_data = dfz.iloc[:10, -4]
@@ -1545,209 +1545,88 @@ class Visualization:
              hoverlabel=dict(bgcolor="white", font_size=12),
         )
 
-        html_file_path = os.path.join(image_dir, "bar4_shivalee.html")
+        html_file_path = os.path.join(image_dir, "bar4_ritam.html")
         pio.write_html(fig, html_file_path)
         print(f"Bar plot saved as HTML file: {html_file_path}")
 
 
-    def score(self):
-        print("Calculating Your Activity Score.....")
-        colors = ["#e63946", "#06d6a0"]
-        score_value = round(
-            math.log(
-                (
-                    len(channel_link[0])
-                    + searches_yr * 2
-                    + likes_yr * 3
-                    + comments_yr * 4
-                )
-                / 9,
-                1.12,
-            ),
-            1,
-        )
-        x_0 = [1, 0, 0, 0]
-        pl.pie([100 - score_value, score_value], autopct="%1.1f%%", startangle=90, colors=colors, pctdistance=10)
-        plt.pie(x_0, radius=0.7, colors="w")
-        plt.axis("equal")
-
-        plt.title("Your YouTube Activity Score",
-                  fontsize=21,
-                  color="steelblue",
-                  fontweight="bold",
-                  fontname="Arial")
-
-        plt.annotate(score_value,
-                     (0, 0), (123, 154),
-                     fontsize=54,
-                     color="teal",
-                     fontweight="bold",
-                     fontname="Arial",
-                     xycoords="axes fraction",
-                     textcoords="offset points",
-                     va="top")
-        plt.annotate('watch:search:like:comments=1:2:3:4',
-                     (0, 0), (0, 0),
-                     fontsize=12,
-                     color="orange",
-                     fontweight="regular",
-                     fontname="Arial",
-                     xycoords="axes fraction",
-                     textcoords="offset points",
-                     va="top")
-
-        plt.savefig(os.path.join(image_dir,"score.png"), dpi=400)
-        plt.clf()
+    
 
     def language(self):
         print("Calculating Your Favorite Video's Language.....")
-        colors = ["#ffc300", "#2ec4b6", '#d90368', '#a5a58d']
-        cnt = 0
-        for i in dfz['lanCounts']:
-            if i:
-                cnt += 1
-                print(i)
+        colors = ["#1f77b4", "#aec7e8", "#7fbf7b", "#2ca02c", "#ff7f0e", "#ffbb78", "#d62728", "#ff9896", "#9467bd", "#c5b0d5"]
+
+
+        # Read CSV file
+        dfz = pd.read_csv(os.path.join(os.getcwd(), "csv_file_Ritam/api_rep.csv"))
+
+        # Check the number of languages
+        cnt = len(dfz)
+
+        if cnt == 0:
+            print("No language data available.")
+            return
+
+        # Prepare data for the chart
+        labels = dfz['language']
+        values = dfz['lanCounts']
+
+        # Create the donut chart
+        fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
+                                     marker=dict(colors=colors[:cnt]), hole=0.7)])
+
+        # Remove legend
         
-        print("------------------------------")
-        if cnt==1:
-            value1 = int(dfz.iloc[0, -1])
 
-            labels = [dfz.iloc[0, -2]]
-            values = [value1]
+        fig.update_layout(title="Your Favorite Videos Language",
+                          title_font_size=24,
+                          title_font_color="steelblue",
+                          title_font_family="Times New Roman")
 
-            fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
-                                          marker=dict(colors=colors[:2]), hole=0.7)])
-            fig.update_layout(title="You Favorite Videos Language",
-                                title_font_size=24,
-                                title_font_color="steelblue",
-                                title_font_family="Times New Roman",
-                              )
 
-            html_file_path = os.path.join(image_dir, "language_shivalee.html")
-            pio.write_html(fig, html_file_path)
-
-        elif cnt > 1:
-            value2 = int(dfz.iloc[1, -1])
-        elif cnt > 3:
-            value3 = int(dfz.iloc[2, -1])
-            value4 = int(dfz.iloc[3, -1])
-            v_t = value1 + value2 + value3 + value4
-            v1 = value1 / v_t
-            v2 = value2 / v_t
-            v3 = value3 / v_t
-            v4 = value4 / v_t
-
-            labels = [dfz.iloc[0, -2], dfz.iloc[1, -2], dfz.iloc[2, -2], dfz.iloc[3, -2]]
-            values = [v1, v2, v3, v4]
-
-            fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
-                                          marker=dict(colors=colors), hole=0.7)])
-            fig.update_layout(title="Yo Favorite Videos Language",
-                                title_font_size=24,
-                                title_font_color="steelblue",
-                                title_font_family="Times New Roman",
-                              )
-
-            html_file_path = os.path.join(image_dir, "language_shivalee.html")
-            pio.write_html(fig, html_file_path)
-
-        elif cnt == 3:
-            value3 = int(dfz.iloc[2, -1])
-            v_t = value1 + value2 + value3
-            v1 = value1 / v_t
-            v2 = value2 / v_t
-            v3 = value3 / v_t
-
-            labels = [dfz.iloc[0, -2], dfz.iloc[1, -2], dfz.iloc[2, -2]]
-            values = [v1, v2, v3]
-
-            fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
-                                      marker=dict(colors=colors[:3]), hole=0.7)])
-            fig.update_layout(title="Y Favorite Videos Language",
-                              title_font_size=24,
-            title_font_color="steelblue",
-            title_font_family="Times New Roman",)
-
-            html_file_path = os.path.join(image_dir, "language_shivalee.html")
-            pio.write_html(fig, html_file_path)
-
-        else:
-            v_t = value1 + value2
-            v1 = value1 / v_t
-            v2 = value2 / v_t
-
-            labels = [dfz.iloc[0, -2], dfz.iloc[1, -2]]
-            values = [v1, v2]
-
-            fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
-                                          marker=dict(colors=colors[:2]), hole=0.7)])
-            fig.update_layout(title=" Favorite Videos Language",
-                              title_font_size=24,
-            title_font_color="steelblue",
-            title_font_family="Times New Roman",)
-
-            html_file_path = os.path.join(image_dir, "language_shivalee.html")
-            pio.write_html(fig, html_file_path)
+        # Save the chart as HTML
+        html_file_path = os.path.join(image_dir, "language_ritam.html")
+        pio.write_html(fig, html_file_path)
 
     
 
 
     def categoryRatio(self):
         print("Calculating Your Category Rank: .....")
-        colors = ["#f07167", "#0081a7", '#00afb9', '#fed9b7']
-        cnt = 0
-        for i in dfz['categoryRatio']:
-            if i:
-                cnt += 1
-        value1 = float(dfz.iloc[0, 4])
-        value2 = float(dfz.iloc[1, 4])
-        if cnt > 3:
-            value3 = float(dfz.iloc[2, 4])
-            value4 = float(dfz.iloc[3, 4])
+        colors = ["#1f77b4", "#aec7e8", "#7fbf7b", "#2ca02c", "#ff7f0e", "#ffbb78", "#d62728", "#ff9896", "#9467bd", "#c5b0d5"]
 
-            labels = [dfz.iloc[0, 2], dfz.iloc[1, 2], dfz.iloc[2, 2], 'other']
-            values = [value1, value2, value3, value4]
+        # Read CSV file
+        dfz = pd.read_csv(os.path.join(os.getcwd(), "csv_file_Ritam/api_rep.csv"))
 
-            fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
-                                          marker=dict(colors=colors), hole=0.7)])
-            fig.update_layout(title="Your Favorite Videos Category Ratio",
-                              title_font_size=24,
-            title_font_color="steelblue",
-            title_font_family="Times New Roman",)
+        # Check the number of categories
+        cnt = len(dfz)
 
-            html_file_path = os.path.join(image_dir, "categoryRatio_shivalee.html")
-            pio.write_html(fig, html_file_path)
+        if cnt == 0:
+            print("No category data available.")
+            return
 
-        elif cnt == 3:
-            value3 = float(dfz.iloc[2, 4])
+        # Extract category names and ratios
+        category_names = dfz['categoryName']
+        category_ratios = dfz['categoryRatio']
 
-            labels = [dfz.iloc[0, 2], dfz.iloc[1, 2], dfz.iloc[2, 2]]
-            values = [value1, value2, value3]
+        labels = list(category_names)
+        values = list(category_ratios)
 
-            fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
-                                          marker=dict(colors=colors[:3]), hole=0.7)])
-            fig.update_layout(title="Your Favorite Videos Category Ratio",
-                              title_font_size=24,
-            title_font_color="steelblue",
-            title_font_family="Times New Roman",
-                              )
+        # Create the pie chart
+        fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
+                                     marker=dict(colors=colors[:cnt]), hole=0.7)])
 
-            html_file_path = os.path.join(image_dir, "categoryRatio_shivalee.html")
-            pio.write_html(fig, html_file_path)
+        
+        
+        fig.update_layout(title="Your Favorite Videos Category Ratio",
+                          title_font_size=24,
+                          title_font_color="steelblue",
+                          title_font_family="Times New Roman")
 
-        else:
-            labels = [dfz.iloc[0, 2], dfz.iloc[1, 2]]
-            values = [value1, value2]
-
-            fig = go.Figure(data=[go.Pie(labels=labels, values=values, textinfo='percent', hoverinfo='label+percent',
-                                          marker=dict(colors=colors[:2]), hole=0.7)])
-            fig.update_layout(title="Your Favorite Videos Category Ratio",
-                              title_font_size=24,
-            title_font_color="steelblue",
-            title_font_family="Times New Roman",)
-
-            html_file_path = os.path.join(image_dir, "categoryRatio_shivalee.html")
-            pio.write_html(fig, html_file_path)
+        
+        # Save the chart as HTML
+        html_file_path = os.path.join(image_dir, "categoryRatio_ritam.html")
+        pio.write_html(fig, html_file_path)
 
 
 
@@ -1916,7 +1795,7 @@ class Visualization:
             items55.append(Paragraph(link55, body_style))
             f55 = Frame(inch * 29.35, inch * 27.95, inch * 12, inch * 2)
             f55.addFromList(items55, img_doc)
-        #
+        
         # items01 = []
         # link11 = "<link href='%s'>PLAY</link>" % (str(df_urls_id.iloc[-1,1]))
         # items11.append(Paragraph(link11, body_style))
@@ -1942,20 +1821,20 @@ class Visualization:
 if __name__ == "__main__":
     print(dfz)
     visual = Visualization()
-    visual.heat_map_week()
+    #visual.heat_map_week()
+    #visual.generate_html_from_dataframe()
     '''visual.bar_graph_week()
-    visual.generate_html_from_dataframe()
     visual.table()
     visual.word_cloud_watch()'''
     # visual.word_cloud_search()
     # visual.word_cloud_comments()
     # visual.score()
     # visual.bar1()
-    visual.bar2()
+    #visual.bar2()
     # visual.bar3()
-    visual.bar4()
-    # visual.language()
-    # visual.categoryRatio()
+    #visual.bar4()
+    visual.language()
+    visual.categoryRatio()
     # visual.gen_pdf()
 
 
