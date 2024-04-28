@@ -1097,13 +1097,20 @@ class Visualization:
             "22",
         ]
 
+        # blue palette
+#         colors = [
+#     [0, 'rgb(248, 246, 227)'],
+#     [0.25, 'rgb(151, 231, 225)'],
+#     [0.5, 'rgb(106, 212, 221)'],
+#     [1, 'rgb(122, 162, 227)']
+# ]       
+        # red palette
         colors = [
-    [0, 'rgb(248, 246, 227)'],
-    [0.25, 'rgb(151, 231, 225)'],
-    [0.5, 'rgb(106, 212, 221)'],
-    [1, 'rgb(122, 162, 227)']
-]
-        
+            [0, 'rgb(169, 68, 56)'],
+            [0.25, 'rgb(210, 69, 69)'],
+            [0.5,'rgb(230, 186, 163)'],
+            [1, 'rgb(228, 222, 190)']
+        ]
         fig = go.Figure(data=go.Heatmap(z=df, x=Cols, y=Index, colorscale=colors, text=df, hoverinfo='z'))
 
         fig.update_layout(
@@ -1113,22 +1120,28 @@ class Visualization:
             title_font_family="Times New Roman",
             xaxis=dict(
                 title="Hour of Day",
-            tickvals=[i-0.5 for i in range(13)],  
+                titlefont=dict(
+                color="white"
+            ),
+            tickvals=[i-0.5 for i in range(13)], 
+            tickfont=dict(color='white'), 
             ticktext=[str(i * 2) for i in range(13)], 
             tickmode='array', 
             tickangle=0,
         ),
-        yaxis=dict(title='Day'),
+        yaxis=dict(title='Day', title_font=dict(color="white"),tickfont=dict(color='white'),),
+       
+        plot_bgcolor='black',
+        paper_bgcolor='black'
         )
         fig.write_html(os.path.join(image_dir, "week_heatmap_shivalee.html"))
 
     
     def bar_graph_week(self):
-        print("Generating Bar Graph for Weekly Views.....")
+        print("Generating Line Chart for Weekly Views.....")
         # Sample data for weekly views
         html = HTML()
         views_by_day = [
-
             html.dataframe_heatmap(0),
             html.dataframe_heatmap(1),
             html.dataframe_heatmap(2),
@@ -1137,30 +1150,42 @@ class Visualization:
             html.dataframe_heatmap(5),
             html.dataframe_heatmap(6)
         ]
-    
+
         # Sum the views for each day
         total_views = np.sum(views_by_day, axis=1)
 
-    # Define weekdays
+        # Define weekdays
         weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
-    # Create bar graph
-        fig = go.Figure(data=go.Bar(x=weekdays, y=total_views, marker_color='steelblue'))
+        # Create line chart with shadow shading
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=weekdays,
+            y=total_views,
+            mode='lines+markers',
+            line=dict(color='#D24545', width=5),  # Adjust line color and width
+            marker=dict(color='#A94438', size=10),  # Adjust marker color and size
+            fill='tozeroy',
+            fillcolor='#E6BAA3',  # Adjust shading color and opacity
+        ))
         fig.update_layout(
-            title="Weekly Views",
+            
             xaxis_title="Weekdays",
             yaxis_title="Number of Views",
-            title_font_size=24,
-            title_font_color="steelblue",
-            title_font_family="Times New Roman",
-            xaxis=dict(tickfont=dict(size=14)),
-            yaxis=dict(tickfont=dict(size=14)),
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)'
+            xaxis=dict(
+                tickfont=dict(size=16, color="black"),  # Adjust tick font color
+                title_font=dict(color="black", size= 20),        # Adjust axis title font color
+            ),
+            yaxis=dict(
+                tickfont=dict(size=16, color="black"),  # Adjust tick font color
+                title_font=dict(color="black", size= 20 ),        # Adjust axis title font color
+            ),
+            plot_bgcolor='white',  # Set plot background color
+            paper_bgcolor='white'  # Set paper background color
         )
 
-    # Write to HTML file
-        fig.write_html(os.path.join(image_dir, "bar_graph_week_shivalee.html"))
+        # Write to HTML file
+        fig.write_html(os.path.join(image_dir, "line_chart_week_shivalee.html"))
 
     def word_cloud_watch(self):
         cm = HTML().find_video_title()
@@ -1419,14 +1444,14 @@ class Visualization:
                 x=data,
                 y=y_labels,
                   # Place the text inside the bars
-                marker=dict(color='#97E7E1'), 
+                marker=dict(color='#D24545'), 
                 orientation='h',
             )
         ])
         
         # Add annotations as links
         for i, text in enumerate(text_data):
-            font_color = "#7AA2E3"
+            font_color = "#E4DEBE"
             fig.add_annotation(
                 x=data[i] / 2,  # Position the annotation in the middle of the bar
                 y=y_labels[i],
@@ -1438,15 +1463,23 @@ class Visualization:
             )
         
         fig.update_layout(
-            title="Most Watched Videos This Year",
-            title_font_size=24,
-            title_font_color="steelblue",
-            title_font_family="Times New Roman",
+            # title="Most Watched Videos This Year",
+            # title_font_size=24,
+            # title_font_color="steelblue",
+            # title_font_family="Times New Roman",
             xaxis=dict(
-            title="Number of Times Viewed",  # Add x-axis title
-            title_font=dict(size=14, color="black"),  # Set x-axis title font size and color
-        ),
-            plot_bgcolor='rgba(0,0,0,0)',
+                title="Number of Times Viewed",  # Add x-axis title
+                title_font=dict(size=20, color="black"),  # Set x-axis title font size and color
+                tickfont=dict(color='black', size =16),
+                showgrid=False,
+            ),
+        yaxis=dict(
+            title_font=dict(color="black", size =20),
+            tickfont=dict(color='black', size =16),
+            showgrid=False,
+            ),
+        plot_bgcolor='white',
+        paper_bgcolor='white'
         )
 
         html_file = os.path.join(image_dir, "bar2_shivalee.html")
@@ -1515,7 +1548,7 @@ class Visualization:
                 type="line",
                 x0=0, y0=name,
                 x1=top_10_data[i], y1=name,
-                line=dict(color='#7AA2E3', width=4),
+                line=dict(color='#D24545', width=4),
                 # hoverinfo='none'
             )
 
@@ -1523,20 +1556,23 @@ class Visualization:
             x=top_10_data,
             y=top_10_names,
             mode='markers',
-            marker=dict(color='#6AD4DD', symbol='circle', size=10),
+            marker=dict(color='#A94438', symbol='circle', size=10),
             text=[f"{val:1.0f}" for val in top_10_data],
             textposition='middle right',  # Adjust text position
             hoverinfo='text'
         ))
 
         fig.update_layout(
-            title="Most Watched Channels This Year",
-            title_font_size=24,
-            title_font_color="steelblue",
-            title_font_family="Times New Roman",
-            xaxis=dict(title='Number of Views', showgrid=False),
-            yaxis=dict(title='Names', showgrid=False, ticklen=10),
-            plot_bgcolor='rgba(0,0,0,0)',
+            # title="Most Watched Channels This Year",
+            # title_font_size=24,
+            # title_font_color="steelblue",
+            # title_font_family="Times New Roman",
+            xaxis=dict(title='Number of Views', showgrid=False, title_font=dict(size=20, color="black"),  # Set x-axis title font size and color
+                tickfont=dict(color='black', size=16),),
+            yaxis=dict(title='Names', showgrid=False, ticklen=10,title_font=dict(size=20, color="black"),  # Set x-axis title font size and color
+                tickfont=dict(color='black', size = 16),),
+            plot_bgcolor='white',
+            paper_bgcolor='white',
             font=dict(
                 family="Times New Roman",
                 size=14,
@@ -1943,10 +1979,10 @@ if __name__ == "__main__":
     print(dfz)
     visual = Visualization()
     visual.heat_map_week()
-    '''visual.bar_graph_week()
-    visual.generate_html_from_dataframe()
-    visual.table()
-    visual.word_cloud_watch()'''
+    visual.bar_graph_week()
+    # visual.generate_html_from_dataframe()
+    # visual.table()
+    # visual.word_cloud_watch()
     # visual.word_cloud_search()
     # visual.word_cloud_comments()
     # visual.score()

@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizations</title>
     <style>
         /* Your existing CSS styles */
+        body {
+            background-color: #000000;
+        }
+
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
         .header {
             background-color: steelblue;
-            color: white;
+            color: black;
+            /* color: white; */
             text-align: left;
             padding: 20px 0;
             font-size: 24px;
@@ -55,31 +62,46 @@
         }
 
         .heatmap {
-            width: 100%; /* Set the width of the heatmap */
+            width: 100%;
+            /* Set the width of the heatmap */
             margin-bottom: 20px;
-            margin-top: 20px; /* Adjust the bottom margin */
+            margin-top: 20px;
+            /* Adjust the bottom margin */
         }
+
         .visualizations {
             display: flex;
-            justify-content: space-between; /* Adjust alignment */
-            gap: 0px; /* Adjust the gap between visualizations */
-            width: 100%; /* Set the width of the container */
+            justify-content: space-between;
+            color: black;
+            /* Adjust alignment */
+            gap: 0px;
+            /* Adjust the gap between visualizations */
+            width: 100%;
+            /* Set the width of the container */
             margin-bottom: 20px;
         }
+
         .visualization {
-            width: 90%; /* Each visualization takes 48% width */
+            width: 90%;
+            color: black;
+            /* Each visualization takes 48% width */
             margin-right: 20px;
         }
+
         iframe {
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add shadow effect */
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            /* Add shadow effect */
         }
+
         .cards {
-            box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);;
+            box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+            color: black;
             margin-bottom: -10px;
             margin-top: -10px;
         }
     </style>
 </head>
+
 <body>
     <header class="header">
         Youtube Data Analysis
@@ -94,39 +116,48 @@
     </header>
     <div class="container">
         <!-- Initial iframes -->
-        <iframe class="cards" id="headerFrame" src="Images/header_aman.html" width="100%" height=auto style="border: none;"></iframe>
+        <iframe class="cards" id="headerFrame" src="Images/header_aman.html" width="100%" height=auto
+            style="border: none;"></iframe>
 
         <div class="visualizations">
             <div class="visualization">
-                <iframe id="heatmapFrame" src="Images/week_heatmap_aman.html" width="100%" height="500" style="border: none;"></iframe>
+                <iframe id="heatmapFrame" src="Images/week_heatmap_aman.html" width="100%" height="500"
+                    style="border: none;"></iframe>
             </div>
             <div class="visualization">
-                <iframe id="bargraphWeekFrame" src="Images/bar_graph_week_aman.html" width="100%" height="500" style="border: none;"></iframe>
-            </div>
-        </div>
-        
-        <div class="visualizations">
-            <div class="visualization">
-                <iframe id="bar4Frame" src="Images/bar4_aman.html" width="100%" height="500" style="border: none;"></iframe>
-            </div>
-            <div class="visualization">
-                <iframe id="bar2Frame" src="Images/bar2_aman.html" width="100%" height="500" style="border: none;"></iframe>
+                <iframe id="bargraphWeekFrame" src="Images/bar_graph_week_aman.html" width="100%" height="500"
+                    style="border: none;"></iframe>
             </div>
         </div>
+
         <div class="visualizations">
             <div class="visualization">
-                <iframe id="wordCloudWatchFrame" src="Images/word_cloud_watch_aman.html" width="100%" height="400" style="border: none;"></iframe>
+                <iframe id="bar4Frame" src="Images/bar4_aman.html" width="100%" height="500"
+                    style="border: none;"></iframe>
             </div>
             <div class="visualization">
-                <iframe id="wordCloudSearchFrame" src="Images/word_cloud_search_aman.html" width="100%" height="400" style="border: none;"></iframe>
+                <iframe id="bar2Frame" src="Images/bar2_aman.html" width="100%" height="500"
+                    style="border: none;"></iframe>
             </div>
         </div>
         <div class="visualizations">
             <div class="visualization">
-                <iframe id="languageFrame" src="Images/language_aman.html" width="100%" height="400" style="border: none;"></iframe>
+                <iframe id="wordCloudWatchFrame" src="Images/word_cloud_watch_aman.html" width="100%" height="400"
+                    style="border: none;"></iframe>
             </div>
             <div class="visualization">
-                <iframe id="categoryRatioFrame" src="Images/categoryRatio_aman.html" width="100%" height="400" style="border: none;"></iframe>
+                <iframe id="wordCloudSearchFrame" src="Images/word_cloud_search_aman.html" width="100%" height="400"
+                    style="border: none;"></iframe>
+            </div>
+        </div>
+        <div class="visualizations">
+            <div class="visualization">
+                <iframe id="languageFrame" src="Images/language_aman.html" width="100%" height="400"
+                    style="border: none;"></iframe>
+            </div>
+            <div class="visualization">
+                <iframe id="categoryRatioFrame" src="Images/categoryRatio_aman.html" width="100%" height="400"
+                    style="border: none;"></iframe>
             </div>
         </div>
     </div>
@@ -140,10 +171,12 @@
             document.getElementById("bar4Frame").src = "Images/bar4_" + selectedOption + ".html";
             document.getElementById("bar2Frame").src = "Images/bar2_" + selectedOption + ".html";
             document.getElementById("wordCloudWatchFrame").src = "Images/word_cloud_watch_" + selectedOption + ".html";
-            document.getElementById("wordCloudSearchFrame").src = "Images/word_cloud_search_" + selectedOption + ".html";
+            document.getElementById("wordCloudSearchFrame").src = "Images/word_cloud_search_" + selectedOption +
+                ".html";
             document.getElementById("languageFrame").src = "Images/language_" + selectedOption + ".html";
             document.getElementById("categoryRatioFrame").src = "Images/categoryRatio_" + selectedOption + ".html";
         }
     </script>
 </body>
+
 </html>
