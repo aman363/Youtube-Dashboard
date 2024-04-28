@@ -1121,18 +1121,19 @@ class Visualization:
             xaxis=dict(
                 title="Hour of Day",
                 titlefont=dict(
-                color="black", size=20
+                color="black", size=16
             ),
             tickvals=[i-0.5 for i in range(13)], 
-            tickfont=dict(color='black',size=16), 
+            tickfont=dict(color='black',size=12), 
             ticktext=[str(i * 2) for i in range(13)], 
             tickmode='array', 
             tickangle=0,
         ),
-        yaxis=dict(title='Day', title_font=dict(color="black", size=20),tickfont=dict(color='black', size=16),),
+        yaxis=dict(title='Day', title_font=dict(color="black", size=16),tickfont=dict(color='black', size=16),),
        
         plot_bgcolor='white',
-        paper_bgcolor='white'
+        paper_bgcolor='white',
+        margin=dict(t=10, b=10),
         )
         fig.write_html(os.path.join(image_dir, "week_heatmap_shivalee.html"))
 
@@ -1175,15 +1176,16 @@ class Visualization:
             xaxis_title="Weekdays",
             yaxis_title="Number of Views",
             xaxis=dict(
-                tickfont=dict(size=16, color="black"),  # Adjust tick font color
-                title_font=dict(color="black", size= 20),        # Adjust axis title font color
+                tickfont=dict(size=12, color="black"),  # Adjust tick font color
+                title_font=dict(color="black", size= 16),        # Adjust axis title font color
             ),
             yaxis=dict(
-                tickfont=dict(size=16, color="black"),  # Adjust tick font color
-                title_font=dict(color="black", size= 20 ),        # Adjust axis title font color
+                tickfont=dict(size=12, color="black"),  # Adjust tick font color
+                title_font=dict(color="black", size= 16 ),        # Adjust axis title font color
             ),
             plot_bgcolor='white',  # Set plot background color
-            paper_bgcolor='white'  # Set paper background color
+            paper_bgcolor='white',  # Set paper background color
+            margin=dict(t=10,b=10),
         )
 
         # Write to HTML file
@@ -1338,7 +1340,7 @@ class Visualization:
                 y=y_labels[i],
                 text=f'<a href="{link_data[i]}" style="color: {font_color}; text-decoration: underline; font-size: 14px;"><b>{text_data[i]}</b></a>',
                 showarrow=False,
-                font=dict(color='black', size=16),  # Customize the font color and size
+                font=dict(color='black', size=14),  # Customize the font color and size
                 xanchor='center',  # Anchor the text in the center of the bar
                 yanchor='middle',
             )
@@ -1350,17 +1352,18 @@ class Visualization:
             # title_font_family="Times New Roman",
             xaxis=dict(
                 title="Number of Times Viewed",  # Add x-axis title
-                title_font=dict(size=20, color="black"),  # Set x-axis title font size and color
-                tickfont=dict(color='black', size =16),
+                title_font=dict(size=16, color="black"),  # Set x-axis title font size and color
+                tickfont=dict(color='black', size =12),
                 showgrid=False,
             ),
         yaxis=dict(
-            title_font=dict(color="black", size =20),
-            tickfont=dict(color='black', size =16),
+            title_font=dict(color="black", size =16),
+            tickfont=dict(color='black', size =12),
             showgrid=False,
             ),
         plot_bgcolor='white',
-        paper_bgcolor='white'
+        paper_bgcolor='white',
+        margin=dict(t=10, b=10),
         )
 
         html_file = os.path.join(image_dir, "bar2_shivalee.html")
@@ -1448,10 +1451,10 @@ class Visualization:
             # title_font_size=24,
             # title_font_color="steelblue",
             # title_font_family="Times New Roman",
-            xaxis=dict(title='Number of Views', showgrid=False, title_font=dict(size=20, color="black"),  # Set x-axis title font size and color
-                tickfont=dict(color='black', size=16),),
-            yaxis=dict(title='Names', showgrid=False, ticklen=10,title_font=dict(size=20, color="black"),  # Set x-axis title font size and color
-                tickfont=dict(color='black', size = 16),),
+            xaxis=dict(title='Number of Views', showgrid=False, title_font=dict(size=16, color="black"),  # Set x-axis title font size and color
+                tickfont=dict(color='black', size=12),),
+            yaxis=dict(title='Names', showgrid=False, ticklen=10,title_font=dict(size=16, color="black"),  # Set x-axis title font size and color
+                tickfont=dict(color='black', size = 12),),
             plot_bgcolor='white',
             paper_bgcolor='white',
             font=dict(
@@ -1460,6 +1463,7 @@ class Visualization:
                 color="black"
             ),
              hoverlabel=dict(bgcolor="white", font_size=12),
+             margin=dict(t=10, b=10),
         )
 
         html_file_path = os.path.join(image_dir, "bar4_shivalee.html")
@@ -1471,7 +1475,7 @@ class Visualization:
 
     def language(self):
         print("Calculating Your Favorite Video's Language.....")
-        colors = ["#1f77b4", "#aec7e8", "#7fbf7b", "#2ca02c", "#ff7f0e", "#ffbb78", "#d62728", "#ff9896", "#9467bd", "#c5b0d5"]
+        colors = ["#A94438", "#D24545", "#E6BAA3", "#E4DEBE"]
 
 
         # Read CSV file
@@ -1495,10 +1499,8 @@ class Visualization:
         # Remove legend
         
 
-        fig.update_layout(title="Your Favorite Videos Language",
-                          title_font_size=24,
-                          title_font_color="steelblue",
-                          title_font_family="Times New Roman")
+        fig.update_layout(margin=dict(t=10, b=10),
+                          )
 
 
         # Save the chart as HTML
@@ -1510,7 +1512,7 @@ class Visualization:
 
     def categoryRatio(self):
         print("Calculating Your Category Rank: .....")
-        colors = ["#1f77b4", "#aec7e8", "#7fbf7b", "#2ca02c", "#ff7f0e", "#ffbb78", "#d62728", "#ff9896", "#9467bd", "#c5b0d5"]
+        colors = ["#A94438", "#D24545", "#E6BAA3", "#E4DEBE", "#7FBF7B"]
 
         # Read CSV file
         dfz = pd.read_csv(os.path.join(os.getcwd(), "csv_file_Shivalee/api_rep.csv"))
@@ -1535,10 +1537,7 @@ class Visualization:
 
         
         
-        fig.update_layout(title="Your Favorite Videos Category Ratio",
-                          title_font_size=24,
-                          title_font_color="steelblue",
-                          title_font_family="Times New Roman")
+        fig.update_layout(margin=dict(t=10, b=10),)
 
         
         # Save the chart as HTML
@@ -1689,7 +1688,7 @@ class Visualization:
             mode='lines',
             name='Shivalee',
             fill='tozeroy',  # Fill the area below the line
-            line=dict(color='#1f77b4'),
+            line=dict(color='#D24545 '),
         )
 
         trace_ritam = go.Scatter(
@@ -1698,7 +1697,7 @@ class Visualization:
             mode='lines',
             name='Ritam',
             fill='tozeroy',  # Fill the area below the line
-            line=dict(color= '#aec7e8'),
+            line=dict(color= '#E6BAA3'),
         )
 
         trace_aman = go.Scatter(
@@ -1707,7 +1706,7 @@ class Visualization:
             mode='lines',
             name='Aman',
             fill='tozeroy',  # Fill the area below the line
-            line=dict(color= '#7fbf7b'),
+            line=dict(color= '#A94438'),
         )
 
         # Create layout for the area chart
@@ -1745,8 +1744,8 @@ if __name__ == "__main__":
     visual.bar2()
     # visual.bar3()
     visual.bar4()
-    #visual.language()
-    #visual.categoryRatio()
+    visual.language()
+    visual.categoryRatio()
     #visual.radarChartComparison()
     visual.barGraphComparison()
     visual.weeklyWatchComparison()
