@@ -1079,9 +1079,9 @@ class Visualization:
         Fri = html.dataframe_heatmap(4)
         Sat = html.dataframe_heatmap(5)
         Sun = html.dataframe_heatmap(6)
-        df = np.vstack((Mon, Tue, Wed, Thu, Fri, Sat, Sun))
+        df = np.vstack((Sun,Sat,Fri,Thu,Wed,Tue,Mon))
 
-        Index = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        Index = ["Sun", "Sat", "Fri", "Thu", "Wed", "Tue", "Mon"]
         Cols = [
             "0",
             "2",
@@ -1106,36 +1106,33 @@ class Visualization:
 # ]       
         # red palette
         colors = [
-            [0, 'rgb(169, 68, 56)'],
-            [0.25, 'rgb(210, 69, 69)'],
-            [0.5,'rgb(230, 186, 163)'],
-            [1, 'rgb(228, 222, 190)']
+            [0, 'rgb(228, 222, 190)'],
+            [0.25, 'rgb(230, 186, 163)'],
+            [0.5,'rgb(210, 69, 69)'],
+            [1, 'rgb(169, 68, 56)']
         ]
         fig = go.Figure(data=go.Heatmap(z=df, x=Cols, y=Index, colorscale=colors, text=df, hoverinfo='z'))
 
         fig.update_layout(
-            # title="What Time Do You Usually Watch Youtube Videos?",
-            # title_font_size=24,
-            # title_font_color="steelblue",
-            # title_font_family="Times New Roman",
-            xaxis=dict(
-                title="Hour of Day",
-                titlefont=dict(
-                color="black", size=16
-            ),
+        xaxis=dict(
+            title="Hour of Day",
+            titlefont=dict(color="black", size=16),
             tickvals=[i-0.5 for i in range(13)], 
-            tickfont=dict(color='black',size=12), 
+            tickfont=dict(color='black', size=12), 
             ticktext=[str(i * 2) for i in range(13)], 
             tickmode='array', 
             tickangle=0,
         ),
-        yaxis=dict(title='Day', title_font=dict(color="black", size=16),tickfont=dict(color='black', size=16),),
-       
+        yaxis=dict(
+            title='Day', 
+            title_font=dict(color="black", size=16),
+            tickfont=dict(color='black', size=16),
+        ),
         plot_bgcolor='white',
         paper_bgcolor='white',
         margin=dict(t=10, b=10),
-        )
-        fig.write_html(os.path.join(image_dir, "week_heatmap_shivalee.html"))
+    )
+        fig.write_html(os.path.join(image_dir, "week_heatmap_aman.html"))
 
     
     def bar_graph_week(self):
@@ -1151,8 +1148,6 @@ class Visualization:
             html.dataframe_heatmap(5),
             html.dataframe_heatmap(6)
         ]
-        
-
         # Sum the views for each day
         total_views = np.sum(views_by_day, axis=1)
         print(total_views)
@@ -1189,7 +1184,7 @@ class Visualization:
         )
 
         # Write to HTML file
-        fig.write_html(os.path.join(image_dir, "bar_graph_week_shivalee.html"))
+        fig.write_html(os.path.join(image_dir, "bar_graph_week_aman.html"))
 
     def word_cloud_watch(self):
         cm = HTML().find_video_title()
@@ -1217,7 +1212,7 @@ class Visualization:
             title_font_family="Times New Roman"
         )
 
-        fig.write_html(os.path.join(image_dir, "word_cloud_watch_shivalee.html"))
+        fig.write_html(os.path.join(image_dir, "word_cloud_watch_aman.html"))
     
     
 
@@ -1252,7 +1247,7 @@ class Visualization:
 
 
         # Save as HTML
-        pio.write_html(fig, os.path.join(image_dir, "word_cloud_search_shivalee.html"))
+        pio.write_html(fig, os.path.join(image_dir, "word_cloud_search_aman.html"))
 
 
     ### WSLC
@@ -1290,7 +1285,7 @@ class Visualization:
     def bar2(self):
         print("Generating Bar Plot.....")
 
-        current_df = pd.read_csv(os.path.join(os.getcwd(),"csv_file_Shivalee/watch_top5.csv"))
+        current_df = pd.read_csv(os.path.join(os.getcwd(),"csv_file_Aman/watch_top5.csv"))
         data = [
             current_df.iloc[0, 4],
             current_df.iloc[1, 4],
@@ -1366,7 +1361,7 @@ class Visualization:
         margin=dict(t=10, b=10),
         )
 
-        html_file = os.path.join(image_dir, "bar2_shivalee.html")
+        html_file = os.path.join(image_dir, "bar2_aman.html")
         pio.write_html(fig, html_file)  # Save the plot as HTML
         print(f"Bar plot saved as HTML: {html_file}")
 
@@ -1412,7 +1407,7 @@ class Visualization:
     def bar4(self):
         sns.set(style="white", font="SimSun", color_codes=True, font_scale=1.5)
 
-        dfz = pd.read_csv(os.path.join(os.getcwd(),"csv_file_Shivalee/api_rep.csv"))
+        dfz = pd.read_csv(os.path.join(os.getcwd(),"csv_file_Aman/api_rep.csv"))
 
         # Get the top 10 data
         top_10_data = dfz.iloc[:10, -4]
@@ -1466,7 +1461,7 @@ class Visualization:
              margin=dict(t=10, b=10),
         )
 
-        html_file_path = os.path.join(image_dir, "bar4_shivalee.html")
+        html_file_path = os.path.join(image_dir, "bar4_aman.html")
         pio.write_html(fig, html_file_path)
         print(f"Bar plot saved as HTML file: {html_file_path}")
 
@@ -1479,7 +1474,7 @@ class Visualization:
 
 
         # Read CSV file
-        dfz = pd.read_csv(os.path.join(os.getcwd(), "csv_file_Shivalee/api_rep.csv"))
+        dfz = pd.read_csv(os.path.join(os.getcwd(), "csv_file_Aman/api_rep.csv"))
 
         # Check the number of languages
         cnt = len(dfz)
@@ -1504,7 +1499,7 @@ class Visualization:
 
 
         # Save the chart as HTML
-        html_file_path = os.path.join(image_dir, "language_shivalee.html")
+        html_file_path = os.path.join(image_dir, "language_aman.html")
         pio.write_html(fig, html_file_path)
 
     
@@ -1515,7 +1510,7 @@ class Visualization:
         colors = ["#A94438", "#D24545", "#E6BAA3", "#E4DEBE", "#7FBF7B"]
 
         # Read CSV file
-        dfz = pd.read_csv(os.path.join(os.getcwd(), "csv_file_Shivalee/api_rep.csv"))
+        dfz = pd.read_csv(os.path.join(os.getcwd(), "csv_file_Aman/api_rep.csv"))
 
         # Check the number of categories
         cnt = len(dfz)
@@ -1541,7 +1536,7 @@ class Visualization:
 
         
         # Save the chart as HTML
-        html_file_path = os.path.join(image_dir, "categoryRatio_shivalee.html")
+        html_file_path = os.path.join(image_dir, "categoryRatio_aman.html")
         pio.write_html(fig, html_file_path)
 
 
@@ -1555,13 +1550,13 @@ class Visualization:
         }
     
         # Define colors for each category
-        colors = ["#1f77b4", "#aec7e8", "#7fbf7b", "#2ca02c", "#ff7f0e", "#ffbb78", "#d62728", "#ff9896", "#9467bd", "#c5b0d5"]
+        colors = ["#A94438","#D24545","#E6BAA3"]
     
         # Initialize radar chart data
         data = []
     
         # Iterate over each user's CSV file
-        for user, file_path in file_paths.items():
+        for i, (user, file_path) in enumerate(file_paths.items()):
             dfz = pd.read_csv(file_path)
             cnt = len(dfz)
             if cnt == 0:
@@ -1574,6 +1569,8 @@ class Visualization:
         
             # Normalize ratios to percentages
             normalized_ratios = [ratio * 100 for ratio in category_ratios]
+
+            user_colors = colors[i % len(colors)]
         
             # Add radar chart trace for current user
             trace = go.Scatterpolar(
@@ -1581,7 +1578,7 @@ class Visualization:
                 theta=category_names,
                 fill='toself',
                 name=user,
-                marker=dict(color=colors[:cnt]),
+                marker=dict(color=user_colors),
             )
             data.append(trace)
     
@@ -1593,10 +1590,6 @@ class Visualization:
                     range=[0, 50]  # Adjust the range as needed
                 )),
             showlegend=True,
-            title='Category Ratio Comparison',
-            title_font_size=24,
-            title_font_color="steelblue",
-            title_font_family="Times New Roman",
         )
 
         # Create radar chart figure
@@ -1651,7 +1644,6 @@ class Visualization:
             barmode='group',  # Adjust the bar mode as needed (group, stacked, overlay)
             showlegend=True,
             plot_bgcolor='white',  # Set plot background color to white
-            legend=dict(yanchor="bottom", y=1.02, xanchor="right", x=0.85),
             # title='Category Ratio Comparison',
             # title_font_size=24,
             # title_font_color="steelblue",
@@ -1735,20 +1727,20 @@ if __name__ == "__main__":
     print(dfz)
     visual = Visualization()
     visual.heat_map_week()
-    visual.bar_graph_week()
+    #visual.bar_graph_week()
     # visual.generate_html_from_dataframe()
     # visual.table()
     # visual.word_cloud_watch()
     # visual.word_cloud_search()
     # visual.bar1()
-    visual.bar2()
+    #visual.bar2()
     # visual.bar3()
-    visual.bar4()
-    visual.language()
-    visual.categoryRatio()
+    #visual.bar4()
+    #visual.language()
+    #visual.categoryRatio()
     #visual.radarChartComparison()
-    visual.barGraphComparison()
-    visual.weeklyWatchComparison()
+    #visual.barGraphComparison()
+    #visual.weeklyWatchComparison()
 
 
 t2= datetime.datetime.now()
