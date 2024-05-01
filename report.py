@@ -1193,7 +1193,6 @@ class Visualization:
             title = "You didn't watch any video this year"
         else:
             unique_string = (" ").join(cm)
-            title = "What Do You Usually Watch on YouTube?"
 
         word_cloud_watch = WordCloud(
             stopwords=["amp", "quot"] + english_stopwords,
@@ -1204,15 +1203,10 @@ class Visualization:
             prefer_horizontal=1
         ).generate(unique_string)
 
+        
         fig = px.imshow(word_cloud_watch)
-        fig.update_layout(
-            title=title,
-            title_font_size=24,
-            title_font_color="steelblue",
-            title_font_family="Times New Roman"
-        )
 
-        fig.write_html(os.path.join(image_dir, "word_cloud_watch_aman.html"))
+        fig.write_html(os.path.join(image_dir, "word_cloud_watch_ritam.html"))
     
     
 
@@ -1225,7 +1219,6 @@ class Visualization:
             title = "You didn't search anything this year"
         else:
             unique_string = (" ").join(list)
-            title = "What Do You Usually Search on YouTube?"
 
         stop_words = ["amp", "quot"] + english_stopwords
         word_cloud_search = WordCloud(
@@ -1238,16 +1231,11 @@ class Visualization:
         ).generate(unique_string)
 
         fig = px.imshow(word_cloud_search)
-        fig.update_layout(
-            title=title,
-            title_font_size=24,
-            title_font_color="steelblue",
-            title_font_family="Times New Roman"
-        )
+        
 
 
         # Save as HTML
-        pio.write_html(fig, os.path.join(image_dir, "word_cloud_search_aman.html"))
+        pio.write_html(fig, os.path.join(image_dir, "word_cloud_search_ritam.html"))
 
 
     ### WSLC
@@ -1726,12 +1714,12 @@ class Visualization:
 if __name__ == "__main__":
     print(dfz)
     visual = Visualization()
-    visual.heat_map_week()
+    #visual.heat_map_week()
     #visual.bar_graph_week()
     # visual.generate_html_from_dataframe()
     # visual.table()
-    # visual.word_cloud_watch()
-    # visual.word_cloud_search()
+    visual.word_cloud_watch()
+    visual.word_cloud_search()
     # visual.bar1()
     #visual.bar2()
     # visual.bar3()
